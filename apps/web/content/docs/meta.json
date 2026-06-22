@@ -1,0 +1,13 @@
+{
+  "title": "Docs",
+  "root": true,
+  "pages": [
+    "index",
+    "getting-started",
+    "styling",
+    "---Editor (Toolbar)---",
+    "editor",
+    "---Block Editor (Blocks)---",
+    "block-editor"
+  ]
+}

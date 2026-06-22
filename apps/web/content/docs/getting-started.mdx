@@ -1,0 +1,116 @@
+---
+title: Getting Started
+description: Get started with rtecn packages in your project.
+---
+
+# Getting Started
+
+## Prerequisites
+
+- React 18 or 19
+- A shadcn/ui setup with Tailwind CSS v4
+- Tiptap v2
+
+## Choose your editor
+
+Rtecn offers two editor packages. Pick the one that fits your use case:
+
+### Option 1: @rtecn/editor (Toolbar-style)
+
+```bash
+npm install @rtecn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link
+```
+
+```css
+@import "@rtecn/editor/style.css";
+```
+
+```tsx
+"use client";
+
+import { useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import { RichTextEditor, Link } from '@rtecn/editor';
+
+export function MyEditor() {
+  const editor = useEditor({
+    extensions: [StarterKit, Link, Underline],
+    content: '<p>Start typing...</p>',
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Toolbar sticky>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <RichTextEditor.Underline />
+          <RichTextEditor.Strikethrough />
+          <RichTextEditor.Code />
+          <RichTextEditor.ClearFormatting />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.H1 />
+          <RichTextEditor.H2 />
+          <RichTextEditor.H3 />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.BulletList />
+          <RichTextEditor.OrderedList />
+          <RichTextEditor.Blockquote />
+          <RichTextEditor.Hr />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Link />
+          <RichTextEditor.Unlink />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Undo />
+          <RichTextEditor.Redo />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
+
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
+}
+```
+
+### Option 2: @rtecn/block-editor (Blocks-style)
+
+```bash
+npm install @rtecn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link
+```
+
+```css
+@import "@rtecn/block-editor/style.css";
+```
+
+```tsx
+"use client";
+
+import { useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Placeholder from '@tiptap/extension-placeholder';
+import Underline from '@tiptap/extension-underline';
+import { BlockEditor } from '@rtecn/block-editor';
+
+export function MyEditor() {
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      Placeholder.configure({ placeholder: "Type / for commands..." }),
+      Underline,
+    ],
+  });
+
+  return <BlockEditor editor={editor} />;
+}
+```
+
+> See the [@rtecn/editor docs](./editor) or [@rtecn/block-editor docs](./block-editor) for detailed API references.

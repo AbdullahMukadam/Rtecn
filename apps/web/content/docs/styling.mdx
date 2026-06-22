@@ -1,0 +1,228 @@
+---
+title: Styling
+description: Customize the appearance of rtecn editors.
+---
+
+# Styling
+
+Both `@rtecn/editor` and `@rtecn/block-editor` are styled using **CSS custom properties** (design tokens) defined by your shadcn/ui theme. This means they automatically adapt to your existing design system — light mode, dark mode, brand colors, border radius, and fonts.
+
+## How it works
+
+The editors don't hardcode colors, spacing, or fonts. Instead, they reference CSS variables like `var(--primary)`, `var(--background)`, `var(--border)`, and `var(--radius)`.
+
+These variables are defined in your shadcn globals:
+
+```css
+/* packages/ui/src/styles/globals.css */
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.2686 0 0);
+  --primary: oklch(0.7686 0.1647 70.0804);
+  --border: oklch(0.9276 0.0058 264.5313);
+  --radius: 0.375rem;
+  --font-mono: JetBrains Mono, monospace;
+  /* ... */
+}
+
+.dark {
+  --background: oklch(0.2046 0 0);
+  --foreground: oklch(0.9219 0 0);
+  --border: oklch(0.3715 0 0);
+  /* ... */
+}
+```
+
+Tailwind v4 maps these to utility classes via `@theme inline`, and the editor CSS consumes them directly via `var()`.
+
+## Dark mode
+
+Both editors fully support dark mode. To enable it:
+
+1. Set up `next-themes` with `attribute="class"`:
+   ```tsx
+   import { ThemeProvider } from "next-themes";
+
+   function Providers({ children }) {
+     return (
+       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+         {children}
+       </ThemeProvider>
+     );
+   }
+   ```
+
+2. The `.dark` class on `<html>` automatically switches the editor's colors.
+
+No editor-specific configuration is needed — it just works.
+
+## Customizing the theme globally
+
+Override any CSS variable in your own stylesheet to change the editors' appearance:
+
+```css
+@import "@rtecn/editor/style.css";
+@import "@rtecn/block-editor/style.css";
+
+:root {
+  --primary: oklch(0.6 0.2 250);
+  --radius: 0.5rem;
+  --font-mono: "Fira Code", monospace;
+}
+
+.dark {
+  --background: oklch(0.15 0 0);
+  --border: oklch(0.3 0 0);
+}
+```
+
+### Available variables
+
+| Variable | Affects |
+|----------|---------|
+| `--background` | Editor background, toolbar background |
+| `--foreground` | Text color |
+| `--primary` | Links, active controls, checkboxes, syntax highlights |
+| `--border` | Editor border, toolbar separator, blockquote line, code block border, HR |
+| `--muted` | Code background, secondary backgrounds |
+| `--muted-foreground` | Placeholder text, blockquote text, muted labels |
+| `--destructive` | Danger items in dropdowns, syntax error highlights |
+| `--accent-foreground` | Syntax keyword/function highlights |
+| `--radius` | Editor border radius, code block radius, checkbox radius |
+| `--font-mono` | Code blocks, inline code |
+| `--font-sans` | Default editor text |
+
+## Scoping overrides to a single editor
+
+Wrap an editor in a container with a CSS class and scope your overrides:
+
+```css
+.my-custom-editor {
+  --primary: oklch(0.7 0.25 150);
+  --radius: 0.25rem;
+}
+```
+
+```tsx
+<div className="my-custom-editor">
+  <RichTextEditor editor={editor}>
+    <RichTextEditor.Toolbar>
+      <RichTextEditor.Bold />
+    </RichTextEditor.Toolbar>
+    <RichTextEditor.Content />
+  </RichTextEditor>
+</div>
+```
+
+This keeps your global theme intact while giving a single editor a different look.
+
+## Per-instance className
+
+Every component accepts a `className` prop that merges with the default classes using `tailwind-merge`.
+
+### RichTextEditor
+
+```tsx
+<RichTextEditor editor={editor} className="rounded-lg shadow-md">
+  <RichTextEditor.Toolbar className="bg-muted/50">
+    <RichTextEditor.Content className="min-h-[300px]" />
+  </RichTextEditor.Toolbar>
+</RichTextEditor>
+```
+
+### BlockEditor
+
+```tsx
+<BlockEditor editor={editor} className="max-w-3xl mx-auto" />
+```
+
+## Overriding editor CSS classes
+
+If you need deeper control, override the editors' CSS classes:
+
+### @rtecn/editor
+
+All classes are prefixed with `rte-`:
+
+```css
+/* Change toolbar background */
+.rte-toolbar {
+  background-color: var(--muted);
+}
+
+/* Increase content min-height */
+.rte-content .ProseMirror {
+  min-height: 300px;
+}
+
+/* Style inline code differently */
+.rte-content .ProseMirror code {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Style task list checkboxes */
+.rte-task-list input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
+```
+
+### @rtecn/block-editor
+
+All classes are prefixed with `block-editor-`:
+
+```css
+/* Style the bubble menu */
+.block-editor-bubble-menu {
+  background-color: var(--popover);
+  border: 1px solid var(--border);
+}
+
+/* Style slash command items */
+.block-editor-slash-menu-item--selected {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Style code blocks */
+.block-editor-content .ProseMirror pre {
+  background-color: #1e1e2e;
+  border-radius: var(--radius);
+}
+
+/* Adjust heading sizes */
+.block-editor-content .ProseMirror h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+```
+
+## Fonts
+
+The editors use `var(--font-sans)` for body text and `var(--font-mono)` for code. Configure these in your `globals.css`:
+
+```css
+:root {
+  --font-sans: Inter, sans-serif;
+  --font-mono: JetBrains Mono, monospace;
+}
+```
+
+Or pass a custom className to the editor container:
+
+```tsx
+<RichTextEditor editor={editor} className="font-serif">
+  ...
+</RichTextEditor>
+```
+
+## Import order
+
+Import the editor CSS **after** your shadcn globals so variables are defined:
+
+```css
+@import "./globals.css";        /* your shadcn theme variables */
+@import "@rtecn/editor/style.css";
+@import "@rtecn/block-editor/style.css";
+```

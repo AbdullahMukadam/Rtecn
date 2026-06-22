@@ -1,0 +1,51 @@
+---
+title: Introduction
+description: Rich text editor components for the shadcn/ui ecosystem.
+---
+
+# Rtecn
+
+Rich text editor components built on [Tiptap](https://tiptap.dev/) for the [shadcn/ui](https://ui.shadcn.com/) ecosystem.
+
+## Packages
+
+This monorepo provides two editor packages:
+
+### [@rtecn/editor](./editor)
+
+A **toolbar-style** rich text editor with a compound component API. Perfect for traditional editing experiences with a top toolbar.
+
+- `RichTextEditor` — root component with toolbar and content area
+- `RichTextEditor.Toolbar` — sticky toolbar with control groups
+- 20+ built-in toolbar controls (Bold, H1, Link, Undo, etc.)
+
+[View docs →](./editor)
+
+### [@rtecn/block-editor](./block-editor)
+
+A **Notion-style** block-type rich text editor. Ideal for modern, block-based writing experiences.
+
+- `BlockEditor` — block-type editor with slash commands and drag handles
+- Slash command menu (type `/` to insert blocks)
+- Bubble menu for inline formatting
+- Block-level actions (duplicate, delete, reorder)
+- Built-in image and table blocks
+
+[View docs →](./block-editor)
+
+## Which one should I use?
+
+| You want... | Use |
+|-------------|-----|
+| A traditional toolbar editor (WordPress, Medium-style) | `@rtecn/editor` |
+| A block-based editor (Notion, Linear-style) | `@rtecn/block-editor` |
+| Both in the same app | Install both packages |
+
+## Common Features
+
+Both editors share:
+
+- Built with shadcn/ui design tokens and CSS variables
+- Full TypeScript support
+- Extensible via Tiptap extensions
+- Lightweight and modular

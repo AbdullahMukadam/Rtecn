@@ -1,0 +1,43 @@
+---
+title: Link Extension
+description: Custom link extension for @rtecn/editor with keyboard shortcut.
+package: "@rtecn/editor"
+---
+
+# Link Extension
+
+`@rtecn/editor` ships a custom `Link` extension that extends `@tiptap/extension-link`.
+
+## Features
+
+- All standard link functionality
+- `Mod-k` keyboard shortcut to open the link editor
+- Proper link editing via popover UI
+
+## Usage
+
+Import the `Link` extension and add it to your Tiptap extensions:
+
+```tsx
+import { Link } from '@rtecn/editor';
+
+const editor = useEditor({
+  extensions: [
+    StarterKit,
+    Link,  // replaces @tiptap/extension-link
+  ],
+});
+```
+
+## Link Control
+
+Use `RichTextEditor.Link` in your toolbar to add the link popover button:
+
+```tsx
+<RichTextEditor.ControlsGroup>
+  <RichTextEditor.Link />
+  <RichTextEditor.Unlink />
+</RichTextEditor.ControlsGroup>
+```
+
+The link button opens a popover where users can enter or edit a URL. The link is applied to the selected text.

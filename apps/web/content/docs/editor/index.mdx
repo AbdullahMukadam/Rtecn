@@ -1,0 +1,599 @@
+---
+title: RichTextEditor
+description: Tiptap-based rich text editor with toolbar controls.
+package: "@rtecn/editor"
+---
+
+# Rich text editor
+
+Package: `@rtecn/editor`
+Import: `import { RichTextEditor } from "@rtecn/editor"`
+Description: Tiptap-based rich text editor with a compound component API and 20+ built-in toolbar controls.
+
+## Installation
+
+```bash
+pnpm add @rtecn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link
+```
+
+```bash
+npm install @rtecn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link
+```
+
+After installation, import the editor styles at the root of your application:
+
+```tsx
+// Your shadcn globals
+import "@rtecn/ui/globals.css";
+
+// Editor styles
+import "@rtecn/editor/style.css";
+```
+
+## Tiptap editor
+
+`@rtecn/editor` provides a UI layer for [Tiptap](https://tiptap.dev/). The `RichTextEditor` component works with the [Editor](https://tiptap.dev/api/editor) instance of Tiptap. This means you have full control over the editor [state and configuration](https://tiptap.dev/guide/configuration) via the [useEditor hook](https://tiptap.dev/installation/react).
+
+The `RichTextEditor` component does not manage state for you — controls just execute operations on the `Editor` instance. For controlled mode or value transforms (HTML/Markdown conversion), refer to the [tiptap.dev](https://tiptap.dev/) documentation.
+
+## Usage
+
+```tsx
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
+import Placeholder from "@tiptap/extension-placeholder";
+import { RichTextEditor, Link } from "@rtecn/editor";
+
+const content = `
+<h2 style="text-align: center;">Welcome to rtecn</h2>
+<p><code>RichTextEditor</code> is based on <a href="https://tiptap.dev/">Tiptap</a> and supports:</p>
+<ul>
+  <li>Text formatting: <strong>bold</strong>, <em>italic</em>, <u>underline</u>, <s>strikethrough</s></li>
+  <li>Headings (h1-h6)</li>
+  <li>Ordered and bullet lists</li>
+  <li>Text alignment</li>
+</ul>
+`;
+
+function MyEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [
+      StarterKit,
+      Link,
+      Underline,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Placeholder.configure({ placeholder: "Start typing..." }),
+    ],
+    content,
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Toolbar sticky>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <RichTextEditor.Underline />
+          <RichTextEditor.Strikethrough />
+          <RichTextEditor.Code />
+          <RichTextEditor.ClearFormatting />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.H1 />
+          <RichTextEditor.H2 />
+          <RichTextEditor.H3 />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.BulletList />
+          <RichTextEditor.OrderedList />
+          <RichTextEditor.Blockquote />
+          <RichTextEditor.Hr />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.AlignLeft />
+          <RichTextEditor.AlignCenter />
+          <RichTextEditor.AlignRight />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Link />
+          <RichTextEditor.Unlink />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Undo />
+          <RichTextEditor.Redo />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
+
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
+}
+```
+
+## RichTextEditor (Root)
+
+The root wrapper that provides the editor context to all children.
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `editor` | `Editor \| null` | — | The Tiptap editor instance |
+| `children` | `ReactNode` | — | Toolbar, content, controls |
+| `className` | `string` | — | Additional CSS classes (merged via `tailwind-merge`) |
+| `labels` | `Partial<RichTextEditorLabels>` | `DEFAULT_LABELS` | Override default labels for accessibility and UI text |
+
+## RichTextEditor.Toolbar
+
+The toolbar that holds control groups. Supports sticky positioning.
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `sticky` | `boolean` | `false` | Makes toolbar stick to top on scroll |
+| `stickyOffset` | `number \| string` | `0` | Offset from top when sticky (e.g. `60` or `"var(--header-height)"`) |
+| `className` | `string` | — | Additional CSS classes |
+
+```tsx
+<RichTextEditor.Toolbar sticky stickyOffset={60}>
+  {/* controls */}
+</RichTextEditor.Toolbar>
+```
+
+## RichTextEditor.ControlsGroup
+
+Groups related controls together. Automatically adds a visual separator between groups (a vertical divider line). No props other than `className` and `children`.
+
+```tsx
+<RichTextEditor.ControlsGroup>
+  <RichTextEditor.Bold />
+  <RichTextEditor.Italic />
+</RichTextEditor.ControlsGroup>
+```
+
+## RichTextEditor.Content
+
+Renders the Tiptap editor content area. Accepts an optional `className` prop.
+
+```tsx
+<RichTextEditor.Content />
+```
+
+## RichTextEditor.Control
+
+A generic control button for custom controls. Use built-in controls when possible.
+
+### Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `active` | `boolean` | Whether the control is in active state |
+| `interactive` | `boolean` | Whether the control is interactive (default `true`) |
+| Plus all standard button HTML attributes | | |
+
+### Basic custom control
+
+Use the `Control` component with the `useRichTextEditorContext` hook to create controls that execute custom editor commands:
+
+```tsx
+import { useRichTextEditorContext } from "@rtecn/editor";
+
+function InsertStarControl() {
+  const { editor } = useRichTextEditorContext();
+
+  return (
+    <RichTextEditor.Control
+      onClick={() => editor?.chain().focus().insertContent("⭐").run()}
+      aria-label="Insert star emoji"
+    >
+      <Star size={16} />
+    </RichTextEditor.Control>
+  );
+}
+```
+
+Then use it in the toolbar like any built-in control:
+
+```tsx
+<RichTextEditor.Toolbar>
+  <RichTextEditor.ControlsGroup>
+    <RichTextEditor.Bold />
+    <RichTextEditor.Italic />
+    <InsertStarControl />
+  </RichTextEditor.ControlsGroup>
+</RichTextEditor.Toolbar>
+```
+
+### Custom color highlight
+
+Create a control that toggles a custom highlight color:
+
+```tsx
+import { useRichTextEditorContext } from "@rtecn/editor";
+
+function YellowHighlightControl() {
+  const { editor } = useRichTextEditorContext();
+  const isActive = editor?.isActive("highlight", { color: "#fef08a" });
+
+  return (
+    <RichTextEditor.Control
+      active={isActive}
+      onClick={() =>
+        editor
+          ?.chain()
+          .focus()
+          .toggleHighlight({ color: "#fef08a" })
+          .run()
+      }
+      aria-label="Yellow highlight"
+    >
+      <Highlighter size={16} />
+    </RichTextEditor.Control>
+  );
+}
+```
+
+### Custom link insert helper
+
+Combine multiple commands into one control:
+
+```tsx
+function InsertExampleLink() {
+  const { editor } = useRichTextEditorContext();
+
+  return (
+    <RichTextEditor.Control
+      onClick={() =>
+        editor
+          ?.chain()
+          .focus()
+          .insertContent("rtecn")
+          .setLink({ href: "https://github.com/anomalyco/shadcn-RTE" })
+          .run()
+      }
+      aria-label="Insert example link"
+    >
+      <Link2 size={16} />
+    </RichTextEditor.Control>
+  );
+}
+```
+
+## Controls and extensions
+
+Some controls require additional [Tiptap extensions](https://tiptap.dev/extensions) to be installed and configured.
+
+### Included with `@tiptap/starter-kit` (no extra installation needed)
+
+| Control | Tiptap Extension |
+|---------|-----------------|
+| `RichTextEditor.Bold` | `@tiptap/starter-kit` |
+| `RichTextEditor.Italic` | `@tiptap/starter-kit` |
+| `RichTextEditor.Strikethrough` | `@tiptap/starter-kit` |
+| `RichTextEditor.ClearFormatting` | `@tiptap/starter-kit` |
+| `RichTextEditor.Code` | `@tiptap/starter-kit` |
+| `RichTextEditor.CodeBlock` | `@tiptap/starter-kit` |
+| `RichTextEditor.H1`–`RichTextEditor.H6` | `@tiptap/starter-kit` |
+| `RichTextEditor.BulletList` | `@tiptap/starter-kit` |
+| `RichTextEditor.OrderedList` | `@tiptap/starter-kit` |
+| `RichTextEditor.Blockquote` | `@tiptap/starter-kit` |
+| `RichTextEditor.Hr` | `@tiptap/starter-kit` |
+| `RichTextEditor.Undo` | `@tiptap/starter-kit` |
+| `RichTextEditor.Redo` | `@tiptap/starter-kit` |
+
+### Controls requiring `@tiptap/extension-underline`
+
+```bash
+pnpm add @tiptap/extension-underline
+```
+
+| Control |
+|---------|
+| `RichTextEditor.Underline` |
+
+### Controls requiring `@tiptap/extension-text-align`
+
+```bash
+pnpm add @tiptap/extension-text-align
+```
+
+```tsx
+import TextAlign from "@tiptap/extension-text-align";
+
+const editor = useEditor({
+  extensions: [
+    TextAlign.configure({ types: ["heading", "paragraph"] }),
+  ],
+});
+```
+
+| Control |
+|---------|
+| `RichTextEditor.AlignLeft` |
+| `RichTextEditor.AlignCenter` |
+| `RichTextEditor.AlignRight` |
+| `RichTextEditor.AlignJustify` |
+
+### Controls requiring `@tiptap/extension-highlight`
+
+```bash
+pnpm add @tiptap/extension-highlight
+```
+
+| Control |
+|---------|
+| `RichTextEditor.Highlight` |
+
+### Controls requiring `@tiptap/extension-subscript`
+
+```bash
+pnpm add @tiptap/extension-subscript
+```
+
+| Control |
+|---------|
+| `RichTextEditor.Subscript` |
+
+### Controls requiring `@tiptap/extension-superscript`
+
+```bash
+pnpm add @tiptap/extension-superscript
+```
+
+| Control |
+|---------|
+| `RichTextEditor.Superscript` |
+
+## Link extension
+
+`@rtecn/editor` ships a custom `Link` extension that extends `@tiptap/extension-link`. It is required for the `Mod-K` keyboard shortcut and the link popover UI to work correctly.
+
+```tsx
+import { Link, RichTextEditor } from "@rtecn/editor";
+
+const editor = useEditor({
+  extensions: [
+    StarterKit,
+    Link, // replaces @tiptap/extension-link
+  ],
+});
+
+// In toolbar:
+<RichTextEditor.ControlsGroup>
+  <RichTextEditor.Link />
+  <RichTextEditor.Unlink />
+</RichTextEditor.ControlsGroup>
+```
+
+The link button opens a popover where users can enter or edit a URL. The `Mod-K` shortcut opens the link editor on selected text.
+
+## Placeholder
+
+Install `@tiptap/extension-placeholder` to show placeholder text when the editor is empty:
+
+```bash
+pnpm add @tiptap/extension-placeholder
+```
+
+```tsx
+import Placeholder from "@tiptap/extension-placeholder";
+
+const editor = useEditor({
+  extensions: [
+    StarterKit,
+    Placeholder.configure({ placeholder: "Start typing..." }),
+  ],
+  content: "",
+});
+```
+
+The placeholder is styled using the `--muted-foreground` CSS variable and adapts to your theme.
+
+## Controlled mode
+
+To control the editor state, use the `onUpdate` callback on the `useEditor` hook:
+
+```tsx
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { RichTextEditor } from "@rtecn/editor";
+
+interface Props {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+function MyControlledEditor({ value, onChange }: Props) {
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: value,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Toolbar>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
+}
+```
+
+## Labels and localization
+
+Override labels for all controls with the `labels` prop. Labels are used for `aria-label` and `title` attributes.
+
+```tsx
+import { RichTextEditor, DEFAULT_LABELS } from "@rtecn/editor";
+
+<RichTextEditor
+  editor={editor}
+  labels={{
+    boldControlLabel: "Gras",
+    italicControlLabel: "Kursiv",
+    ...DEFAULT_LABELS,
+  }}
+>
+  {/* ... */}
+</RichTextEditor>
+```
+
+### All available labels
+
+```tsx
+interface RichTextEditorLabels {
+  // Controls
+  boldControlLabel: string;
+  italicControlLabel: string;
+  underlineControlLabel: string;
+  strikeControlLabel: string;
+  clearFormattingControlLabel: string;
+  codeControlLabel: string;
+  codeBlockControlLabel: string;
+  h1ControlLabel: string;
+  h2ControlLabel: string;
+  h3ControlLabel: string;
+  h4ControlLabel: string;
+  h5ControlLabel: string;
+  h6ControlLabel: string;
+  bulletListControlLabel: string;
+  orderedListControlLabel: string;
+  blockquoteControlLabel: string;
+  hrControlLabel: string;
+  linkControlLabel: string;
+  unlinkControlLabel: string;
+  undoControlLabel: string;
+  redoControlLabel: string;
+  alignLeftControlLabel: string;
+  alignCenterControlLabel: string;
+  alignRightControlLabel: string;
+  alignJustifyControlLabel: string;
+  highlightControlLabel: string;
+  subscriptControlLabel: string;
+  superscriptControlLabel: string;
+  tasksControlLabel: string;
+  tasksSinkLabel: string;
+  tasksLiftLabel: string;
+  sourceCodeControlLabel: string;
+
+  // Link editor
+  linkEditorInputLabel: string;
+  linkEditorInputPlaceholder: string;
+  linkEditorExternalLink: string;
+  linkEditorInternalLink: string;
+  linkEditorSave: string;
+}
+```
+
+### Default labels
+
+```tsx
+import { DEFAULT_LABELS } from "@rtecn/editor";
+
+// Values:
+{
+  boldControlLabel: "Bold",
+  italicControlLabel: "Italic",
+  underlineControlLabel: "Underline",
+  strikeControlLabel: "Strikethrough",
+  clearFormattingControlLabel: "Clear formatting",
+  codeControlLabel: "Code",
+  codeBlockControlLabel: "Code block",
+  h1ControlLabel: "Heading 1",
+  h2ControlLabel: "Heading 2",
+  h3ControlLabel: "Heading 3",
+  h4ControlLabel: "Heading 4",
+  h5ControlLabel: "Heading 5",
+  h6ControlLabel: "Heading 6",
+  bulletListControlLabel: "Bullet list",
+  orderedListControlLabel: "Ordered list",
+  blockquoteControlLabel: "Blockquote",
+  hrControlLabel: "Horizontal rule",
+  linkControlLabel: "Link",
+  unlinkControlLabel: "Remove link",
+  undoControlLabel: "Undo",
+  redoControlLabel: "Redo",
+  alignLeftControlLabel: "Align left",
+  alignCenterControlLabel: "Align center",
+  alignRightControlLabel: "Align right",
+  alignJustifyControlLabel: "Align justify",
+  highlightControlLabel: "Highlight",
+  subscriptControlLabel: "Subscript",
+  superscriptControlLabel: "Superscript",
+  tasksControlLabel: "Task list",
+  tasksSinkLabel: "Decrease task level",
+  tasksLiftLabel: "Increase task level",
+  sourceCodeControlLabel: "Source code",
+  linkEditorInputLabel: "Enter URL",
+  linkEditorInputPlaceholder: "https://example.com",
+  linkEditorExternalLink: "Open in new tab",
+  linkEditorInternalLink: "Open in same tab",
+  linkEditorSave: "Save",
+}
+```
+
+## Editor context
+
+Use the `useRichTextEditorContext` hook to access the editor instance from inside a child component:
+
+```tsx
+import { useRichTextEditorContext } from "@rtecn/editor";
+
+function CustomBoldButton() {
+  const { editor } = useRichTextEditorContext();
+
+  return (
+    <button onClick={() => editor?.chain().focus().toggleBold().run()}>
+      Bold
+    </button>
+  );
+}
+```
+
+## Code highlight
+
+To use syntax highlighting in code blocks, install `@tiptap/extension-code-block-lowlight` and `lowlight`:
+
+```bash
+pnpm add lowlight @tiptap/extension-code-block-lowlight
+```
+
+```tsx
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { createLowlight } from "lowlight";
+import ts from "highlight.js/lib/languages/typescript";
+
+const lowlight = createLowlight();
+lowlight.register({ ts });
+
+const editor = useEditor({
+  extensions: [
+    StarterKit.configure({ codeBlock: false }),
+    CodeBlockLowlight.configure({ lowlight }),
+  ],
+});
+```
+
+The editor styles include syntax highlighting tokens for `.hljs-*` classes that use your theme's CSS variables (`--primary`, `--muted-foreground`, `--destructive`, `--accent-foreground`).
+
+## Styling
+
+Both the editor UI and content area are styled using CSS variables from your shadcn theme. See the [Styling guide](/docs/styling) for details on customization.

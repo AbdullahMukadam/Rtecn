@@ -1,0 +1,263 @@
+---
+title: BlockEditor
+description: Notion-style block-based rich text editor with slash commands and bubble menu.
+package: "@rtecn/block-editor"
+---
+
+# Block Editor
+
+Package: `@rtecn/block-editor`
+Import: `import { BlockEditor } from "@rtecn/block-editor"`
+Description: Notion-style block-based editor with slash commands, drag handles, and a context-aware bubble menu for inline formatting.
+
+## Installation
+
+```bash
+pnpm add @rtecn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit
+```
+
+```bash
+npm install @rtecn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit
+```
+
+After installation, import the editor styles at the root of your application:
+
+```tsx
+// Your shadcn globals
+import "@rtecn/ui/globals.css";
+
+// Block editor styles
+import "@rtecn/block-editor/style.css";
+```
+
+## Usage
+
+```tsx
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Placeholder from "@tiptap/extension-placeholder";
+import Underline from "@tiptap/extension-underline";
+import TaskList from "@tiptap/extension-task-list";
+import TaskItem from "@tiptap/extension-task-item";
+import {
+  BlockEditor,
+  SlashCommand,
+  getSlashCommandSuggestion,
+} from "@rtecn/block-editor";
+
+function MyBlockEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [
+      StarterKit.configure({
+        heading: { levels: [1, 2, 3] },
+      }),
+      Placeholder.configure({ placeholder: "Type / for commands..." }),
+      Underline,
+      TaskList,
+      TaskItem.configure({ nested: true }),
+      SlashCommand.configure({
+        suggestion: getSlashCommandSuggestion(),
+      }),
+    ],
+  });
+
+  return <BlockEditor editor={editor} />;
+}
+```
+
+## BlockEditor (Root)
+
+The root wrapper that provides editor context. Renders the full editor UI by default (drag handle, block actions, bubble menu, and content area) or accepts custom children.
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `editor` | `Editor \| null` | — | The Tiptap editor instance |
+| `children` | `ReactNode` | — | Optional custom children to replace the default layout |
+| `className` | `string` | — | Additional CSS classes |
+| `labels` | `Partial<BlockEditorLabels>` | `DEFAULT_BLOCK_EDITOR_LABELS` | Override default slash command labels |
+
+### Labels
+
+| Key | Default | Description |
+|-----|---------|-------------|
+| `paragraphLabel` | `"Text"` | Label for paragraph node |
+| `headingLabel` | `"Heading"` | Label for heading nodes |
+| `bulletListLabel` | `"Bullet list"` | Label for bullet list |
+| `orderedListLabel` | `"Numbered list"` | Label for ordered list |
+| `taskListLabel` | `"To-do list"` | Label for task list |
+| `blockquoteLabel` | `"Quote"` | Label for blockquote |
+| `codeBlockLabel` | `"Code"` | Label for code block |
+| `dividerLabel` | `"Divider"` | Label for divider |
+
+## BlockEditor.Content
+
+Renders the editor content area with the drag handle and block actions. Use this when providing custom children to the root.
+
+```tsx
+<BlockEditor editor={editor}>
+  <BlockEditor.Content />
+</BlockEditor>
+```
+
+## BlockEditor.BubbleMenu
+
+A standalone bubble menu component that can be used outside the BlockEditor root. Useful if you want to customize the bubble menu position or behavior.
+
+```tsx
+<BlockEditor editor={editor}>
+  <BlockEditor.Content />
+  <BlockEditor.BubbleMenu />
+</BlockEditor>
+```
+
+## Features
+
+### Slash command menu
+
+Type `/` to open the slash command menu. The menu shows available block types. Navigate with arrow keys and press Enter to insert.
+
+**Available commands:**
+
+| Command | Description |
+|---------|-------------|
+| Text | Plain paragraph |
+| Heading 1/2/3 | Section headings |
+| Bullet List | Unordered list |
+| Numbered List | Ordered list |
+| Task List | Checklist with checkboxes |
+| Quote | Blockquote |
+| Code | Code block with syntax highlighting (requires lowlight) |
+| Divider | Horizontal rule |
+| Image | Insert an image via URL |
+| Table | Insert a 3×3 table with header row |
+
+### Custom slash command items
+
+```tsx
+import {
+  BlockEditor,
+  SlashCommand,
+  defaultSlashCommandItems,
+  getSlashCommandSuggestion,
+} from "@rtecn/block-editor";
+
+const myItems = [
+  ...defaultSlashCommandItems,
+  {
+    id: "custom",
+    title: "Custom",
+    description: "A custom command",
+    keywords: ["custom"],
+    command: ({ editor, range }) => {
+      editor.chain().focus().deleteRange(range).insertContent("Hello!").run();
+    },
+  },
+];
+
+const editor = useEditor({
+  extensions: [
+    StarterKit,
+    SlashCommand.configure({
+      suggestion: getSlashCommandSuggestion(myItems),
+    }),
+  ],
+});
+```
+
+### Bubble menu
+
+Select text to see the floating bubble menu with:
+- **Node type selector** — Switch between paragraph, headings, lists, etc.
+- **Inline formatting** — Bold, Italic, Underline, Strike, Code
+- **Link insertion/removal** — Add or remove links
+- **Text alignment** — Left, Center, Right
+
+The bubble menu automatically positions itself near the selection and is styled with your theme's `--popover` tokens.
+
+### Block actions
+
+Click the drag handle (grip icon) on the left side of any block to access a dropdown with:
+- **Duplicate** — Duplicate the current block
+- **Delete** — Delete the current block
+
+### Drag handle
+
+Drag blocks to reorder them using the grip icon on the left. The drag handle uses `@tiptap/extension-drag-handle-react`.
+
+## Extensions
+
+The BlockEditor uses these Tiptap extensions internally (they must be installed as peer dependencies):
+
+| Extension | Purpose | Required |
+|-----------|---------|----------|
+| `@tiptap/starter-kit` | Core editor functionality | Yes |
+| `@tiptap/pm` | ProseMirror runtime | Yes |
+| `@tiptap/react` | React bindings | Yes |
+
+These extensions are bundled as direct dependencies:
+
+| Extension | Purpose |
+|-----------|---------|
+| `@tiptap/extension-drag-handle` | Block drag handle logic |
+| `@tiptap/extension-drag-handle-react` | React drag handle UI |
+| `@tiptap/extension-image` | Image block |
+| `@tiptap/extension-table` | Table block |
+| `@tiptap/extension-table-row` | Table row |
+| `@tiptap/extension-table-cell` | Table cell |
+| `@tiptap/extension-table-header` | Table header |
+| `@tiptap/suggestion` | Slash command suggestion engine |
+| `@tiptap/extension-code-block-lowlight` | (optional) Syntax highlighting |
+
+## Syntax highlighting
+
+To enable syntax highlighting in code blocks, install `lowlight` and pass it to `@tiptap/extension-code-block-lowlight`:
+
+```bash
+pnpm add lowlight @tiptap/extension-code-block-lowlight
+```
+
+```tsx
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { common, createLowlight } from "lowlight";
+
+const lowlight = createLowlight(common);
+
+const editor = useEditor({
+  extensions: [
+    StarterKit.configure({ codeBlock: false }),
+    CodeBlockLowlight.configure({ lowlight }),
+    SlashCommand.configure({
+      suggestion: getSlashCommandSuggestion(),
+    }),
+  ],
+});
+```
+
+## Placeholder
+
+Install `@tiptap/extension-placeholder` to show placeholder text:
+
+```bash
+pnpm add @tiptap/extension-placeholder
+```
+
+```tsx
+import Placeholder from "@tiptap/extension-placeholder";
+
+const editor = useEditor({
+  extensions: [
+    StarterKit,
+    Placeholder.configure({ placeholder: "Type / for commands..." }),
+  ],
+  content: "",
+});
+```
+
+## Styling
+
+Both the editor UI and content area are styled using CSS variables from your shadcn theme. See the [Styling guide](/docs/styling) for details on customization.
