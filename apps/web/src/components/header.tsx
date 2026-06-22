@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { ModeToggle } from "./mode-toggle";
+import { GITHUB_URL } from "@/app/page";
 
 export default function Header() {
   return (
@@ -19,7 +20,7 @@ export default function Header() {
           Docs
         </Link>
         <a
-          href="https://github.com/anomalyco/shadcn-RTE"
+          href={GITHUB_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="text-sm text-muted-foreground no-underline transition-colors hover:text-foreground"

@@ -3,7 +3,7 @@ import { Button } from "@rtecn/ui/components/button";
 import { EditorSection } from "@/components/editor-section";
 import Header from "@/components/header";
 
-const GITHUB_URL = "https://github.com/anomalyco/shadcn-RTE";
+export const GITHUB_URL = "https://github.com/AbdullahMukadam/Rtecn";
 
 const editorCode = `import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
