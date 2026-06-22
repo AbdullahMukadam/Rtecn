@@ -8,6 +8,8 @@
     "---Editor (Toolbar)---",
     "editor",
     "---Block Editor (Blocks)---",
-    "block-editor"
+    "block-editor",
+    "---Registry---",
+    "registry"
   ]
 }

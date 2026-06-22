@@ -1,0 +1,56 @@
+---
+title: Registry
+description: Install rtecn packages via the shadcn registry.
+---
+
+# shadcn Registry
+
+Rtecn packages are available as a [shadcn registry](https://ui.shadcn.com/docs/registry), allowing you to install the source code directly into your project using the shadcn CLI.
+
+## Setup
+
+Add the rtecn registry to your `components.json`:
+
+```json
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "importPaths": {
+    "@rtecn": "https://rtecn.space/r/{name}.json"
+  }
+}
+```
+
+## Available packages
+
+| Package | Command |
+|---------|---------|
+| [@rtecn/editor](./editor) | `npx shadcn@latest add @rtecn/editor` |
+| [@rtecn/block-editor](./block-editor) | `npx shadcn@latest add @rtecn/block-editor` |
+
+## How it works
+
+The registry is served as static JSON files from `https://rtecn.space/r/`:
+
+- **`registry.json`** — catalog listing all available packages with metadata
+- **`editor.json`** — item schema for the toolbar editor (18 files, 17 dependencies)
+- **`block-editor.json`** — item schema for the block editor (19 files, 26 dependencies)
+
+When you run `shadcn add @rtecn/editor`, the CLI:
+
+1. Fetches `https://rtecn.space/r/editor.json`
+2. Reads the `files` array to know which source files to install
+3. Copies each file's `content` into your project at the configured paths
+4. Installs all `dependencies` into your project
+
+## npm vs registry
+
+| | npm | Registry |
+|---|---|---|
+| Install location | `node_modules` | Your project source |
+| Customizable | No (published dist) | Yes (edit the source) |
+| Versioning | Semver via npm | Latest from source |
+| Use case | Quick setup | Full control |
+
+## Source
+
+The registry is built from the same source as the npm packages. See [`scripts/build-registry.mjs`](https://github.com/AbdullahMukadam/Rtecn/blob/main/scripts/build-registry.mjs) for the build script.

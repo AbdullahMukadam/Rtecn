@@ -1,0 +1,218 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "rtecn",
+  "homepage": "https://rtecn.space",
+  "items": [
+    {
+      "name": "editor",
+      "type": "registry:component",
+      "title": "Rich Text Editor",
+      "description": "A toolbar-style rich text editor built on Tiptap with shadcn/ui tokens.",
+      "dependencies": [
+        "@tiptap/react@^2.11.5",
+        "@tiptap/pm@^2.11.5",
+        "@tiptap/starter-kit@^2.11.5",
+        "@tiptap/extension-link@^2.11.5",
+        "@tiptap/extension-underline@^2.11.5",
+        "@tiptap/extension-highlight@^2.11.5",
+        "@tiptap/extension-text-align@^2.11.5",
+        "@tiptap/extension-subscript@^2.11.5",
+        "@tiptap/extension-superscript@^2.11.5",
+        "@tiptap/extension-code-block-lowlight@^2.11.5",
+        "@tiptap/extension-placeholder@^2.11.5",
+        "@base-ui/react@^1.0.0",
+        "lowlight@^3.3.0",
+        "lucide-react@^0.500.0",
+        "class-variance-authority@^0.7.1",
+        "clsx@^2.1.1",
+        "tailwind-merge@^3.0.0"
+      ],
+      "files": [
+        {
+          "path": "rte-editor/rte-text-editor.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/rte-context.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/rte-toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/rte-content.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/rte-controls-group.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "rte-editor/controls/rte-control.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/controls/rte-controls.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/controls/rte-link-control.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/extensions/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/extensions/link.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/ui/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "rte-editor/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/ui/toggle.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/ui/input.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "block-editor",
+      "type": "registry:component",
+      "title": "Block Editor",
+      "description": "A Notion-style block editor built on Tiptap with shadcn/ui tokens.",
+      "dependencies": [
+        "@tiptap/react@^2.11.5",
+        "@tiptap/pm@^2.11.5",
+        "@tiptap/starter-kit@^2.11.5",
+        "@tiptap/core@^2.11.5",
+        "@tiptap/extension-link@^2.11.5",
+        "@tiptap/extension-underline@^2.11.5",
+        "@tiptap/extension-code-block-lowlight@^2.11.5",
+        "@tiptap/extension-placeholder@^2.11.5",
+        "@tiptap/extension-text-align@^2.11.5",
+        "@tiptap/extension-task-list@^2.11.5",
+        "@tiptap/extension-task-item@^2.11.5",
+        "@tiptap/extension-image@^2.11.5",
+        "@tiptap/extension-table@^2.11.5",
+        "@tiptap/extension-table-row@^2.11.5",
+        "@tiptap/extension-table-cell@^2.11.5",
+        "@tiptap/extension-table-header@^2.11.5",
+        "@tiptap/extension-drag-handle@^2.11.5",
+        "@tiptap/extension-drag-handle-react@^2.11.5",
+        "@tiptap/suggestion@^2.11.5",
+        "@base-ui/react@^1.0.0",
+        "@floating-ui/dom@^1.6.0",
+        "lowlight@^3.3.0",
+        "lucide-react@^0.500.0",
+        "class-variance-authority@^0.7.1",
+        "clsx@^2.1.1",
+        "tailwind-merge@^3.0.0"
+      ],
+      "files": [
+        {
+          "path": "rte-block-editor/block-editor.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/block-actions.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/bubble-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "rte-block-editor/extensions/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/extensions/slash-command/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/extensions/slash-command/slash-command.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/extensions/slash-command/suggestion.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/extensions/slash-command/suggestion-list.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/ui/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/ui/alert.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/ui/label.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/ui/scroll-area.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/ui/textarea.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-block-editor/lib/utils.ts",
+          "type": "registry:lib"
+        }
+      ]
+    }
+  ]
+}

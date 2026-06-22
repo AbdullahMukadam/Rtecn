@@ -22,7 +22,7 @@ const fontMono = Fira_Code({
 
 
 export const metadata: Metadata = {
-  title: "rtecn",
+  title: "Rtecn",
   description: "Rich text editor components for the shadcn/ui ecosystem.",
 };
 

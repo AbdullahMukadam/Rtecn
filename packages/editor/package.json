@@ -1,6 +1,6 @@
 {
   "name": "@rtecn/editor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -18,7 +18,7 @@
   },
   "files": ["dist"],
   "scripts": {
-    "build": "tsup && cp src/style.css dist/style.css",
+    "build": "tsup && node -e \"require('fs').copyFileSync('src/style.css','dist/style.css')\"",
     "dev": "tsup --watch",
     "check-types": "tsc --noEmit",
     "prepublishOnly": "pnpm build"

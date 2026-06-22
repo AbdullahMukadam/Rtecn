@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
+    "build:registry": "node scripts/build-registry.mjs",
     "check-types": "turbo check-types",
     "dev:web": "turbo -F web dev"
   },

@@ -57,10 +57,33 @@ If you want to add app-specific blocks instead of shared primitives, run the sha
 ```
 shadcn-RTE/
 ├── apps/
-│   └── web/         # Fullstack application (Next.js)
+│   └── web/         # Fullstack application (Next.js) + registry
 ├── packages/
-│   ├── ui/          # Shared shadcn/ui components and styles
+│   ├── editor/      # @rtecn/editor — toolbar-style rich text editor
+│   ├── block-editor/ # @rtecn/block-editor — block-type editor
+│   └── ui/          # Shared shadcn/ui components and styles
 ```
+
+## Registry Installation
+
+Both editor packages are available via the shadcn registry. Add the rtecn registry to your `components.json`:
+
+```json
+{
+  "importPaths": {
+    "@rtecn": "https://rtecn.space/r/{name}.json"
+  }
+}
+```
+
+Then install either package:
+
+```bash
+npx shadcn@latest add @rtecn/editor
+npx shadcn@latest add @rtecn/block-editor
+```
+
+The registry is built from source via `pnpm build:registry`.
 
 ## Available Scripts
 
