@@ -209,52 +209,52 @@ importers:
         specifier: ^1.7.6
         version: 1.7.6
       '@tiptap/core':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/pm@2.27.2)
       '@tiptap/extension-code-block-lowlight':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/extension-code-block@2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)(highlight.js@11.11.1)(lowlight@3.3.0)
       '@tiptap/extension-drag-handle':
-        specifier: ^2.27.2
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/extension-collaboration@2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)(y-prosemirror@1.3.7(prosemirror-model@1.25.8)(prosemirror-state@1.4.4)(prosemirror-view@1.41.9)(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)))(@tiptap/extension-node-range@2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)(y-prosemirror@1.3.7(prosemirror-model@1.25.8)(prosemirror-state@1.4.4)(prosemirror-view@1.41.9)(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31))
       '@tiptap/extension-drag-handle-react':
-        specifier: ^2.27.2
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/extension-drag-handle@2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/extension-collaboration@2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)(y-prosemirror@1.3.7(prosemirror-model@1.25.8)(prosemirror-state@1.4.4)(prosemirror-view@1.41.9)(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)))(@tiptap/extension-node-range@2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)(y-prosemirror@1.3.7(prosemirror-model@1.25.8)(prosemirror-state@1.4.4)(prosemirror-view@1.41.9)(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)))(@tiptap/pm@2.27.2)(@tiptap/react@2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@tiptap/extension-image':
-        specifier: ^2.27.2
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))
       '@tiptap/extension-link':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)
       '@tiptap/extension-placeholder':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)
       '@tiptap/extension-table':
-        specifier: ^2.27.2
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)
       '@tiptap/extension-table-cell':
-        specifier: ^2.27.2
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))
       '@tiptap/extension-table-header':
-        specifier: ^2.27.2
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))
       '@tiptap/extension-table-row':
-        specifier: ^2.27.2
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))
       '@tiptap/extension-underline':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))
       '@tiptap/pm':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2
       '@tiptap/react':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@tiptap/starter-kit':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2
       '@tiptap/suggestion':
-        specifier: ^2.27.2
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)
       class-variance-authority:
         specifier: ^0.7.1
@@ -296,25 +296,25 @@ importers:
         specifier: ^1.0.0
         version: 1.5.0(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@tiptap/extension-code-block-lowlight':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/extension-code-block@2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)(highlight.js@11.11.1)(lowlight@3.3.0)
       '@tiptap/extension-link':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)
       '@tiptap/extension-placeholder':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)
       '@tiptap/extension-underline':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))
       '@tiptap/pm':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2
       '@tiptap/react':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@tiptap/pm@2.27.2)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@tiptap/starter-kit':
-        specifier: ^2.11.5
+        specifier: '>=2.11.5 <4'
         version: 2.27.2
       class-variance-authority:
         specifier: ^0.7.1
