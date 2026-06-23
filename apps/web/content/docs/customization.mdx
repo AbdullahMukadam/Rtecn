@@ -1,0 +1,257 @@
+---
+title: Customization
+description: See how to customize both editors through variants, CSS variables, className props, and more.
+---
+
+# Customization
+
+## RichTextEditor
+
+### Variants
+
+Switch between `default`, `subtle`, and `compact` variants using the `variant` prop.
+
+<EditorVariantsDemo />
+
+```tsx
+<RichTextEditor editor={editor} variant="default">
+  <RichTextEditor.Toolbar>
+    {/* toolbar controls */}
+  </RichTextEditor.Toolbar>
+  <RichTextEditor.Content />
+</RichTextEditor>
+
+<RichTextEditor editor={editor} variant="subtle">
+  <RichTextEditor.Toolbar>
+    {/* toolbar controls */}
+  </RichTextEditor.Toolbar>
+  <RichTextEditor.Content />
+</RichTextEditor>
+
+<RichTextEditor editor={editor} variant="compact">
+  <RichTextEditor.Toolbar>
+    {/* toolbar controls */}
+  </RichTextEditor.Toolbar>
+  <RichTextEditor.Content />
+</RichTextEditor>
+```
+
+### Root className
+
+Pass Tailwind classes to the root component via `className`. They are merged using `tailwind-merge`.
+
+<EditorClassNameDemo />
+
+```tsx
+<RichTextEditor
+  editor={editor}
+  className="rounded-xl shadow-lg ring-1 ring-black/5"
+>
+  <RichTextEditor.Toolbar>
+    {/* toolbar controls */}
+  </RichTextEditor.Toolbar>
+  <RichTextEditor.Content />
+</RichTextEditor>
+```
+
+### Scoped CSS Variables
+
+Wrap the editor in a div with custom CSS variables to scope a theme to a single instance.
+
+<EditorThemingDemo />
+
+```tsx
+<div style={{
+  "--primary": "oklch(0.6 0.2 25)",
+  "--radius": "0.75rem",
+  "--border": "oklch(0.6 0.15 25 / 0.3)",
+  "--accent": "oklch(0.9 0.05 25)",
+}}>
+  <RichTextEditor editor={editor}>
+    <RichTextEditor.Toolbar>
+      {/* toolbar controls */}
+    </RichTextEditor.Toolbar>
+    <RichTextEditor.Content />
+  </RichTextEditor>
+</div>
+```
+
+### Sticky Toolbar
+
+Pin the toolbar to the top of the viewport on scroll. Customize the background with `className`.
+
+<EditorStickyToolbarDemo />
+
+```tsx
+<RichTextEditor editor={editor}>
+  <RichTextEditor.Toolbar
+    sticky
+    stickyOffset={0}
+    className="bg-accent/30 backdrop-blur-sm"
+  >
+    {/* toolbar controls */}
+  </RichTextEditor.Toolbar>
+  <RichTextEditor.Content />
+</RichTextEditor>
+```
+
+### Custom Toolbar Controls
+
+Add your own buttons to the toolbar using `useRichTextEditorContext` and `RichTextEditor.Control`.
+
+<EditorCustomControlsDemo />
+
+```tsx
+import { useRichTextEditorContext } from "@rtecn/editor";
+import { Star } from "lucide-react";
+
+function InsertStar() {
+  const { editor } = useRichTextEditorContext();
+  return (
+    <RichTextEditor.Control
+      onClick={() => editor?.chain().focus().insertContent("⭐ ").run()}
+      title="Insert star emoji"
+    >
+      <Star className="h-4 w-4" />
+    </RichTextEditor.Control>
+  );
+}
+
+// In your toolbar:
+<RichTextEditor.ControlsGroup>
+  <InsertStar />
+</RichTextEditor.ControlsGroup>
+```
+
+### Read-only Mode
+
+Toggle the editor between editable and read-only using Tiptap's `editable` prop.
+
+<EditorReadOnlyDemo />
+
+```tsx
+const [isEditable, setIsEditable] = useState(true);
+const editor = useEditor({
+  editable: isEditable,
+  extensions: [...],
+});
+
+// Toggle:
+<button onClick={() => setIsEditable(!isEditable)}>
+  {isEditable ? "Switch to Read-only" : "Switch to Editable"}
+</button>
+```
+
+When read-only, the bubble menu in BlockEditor also automatically hides.
+
+### Custom Label Overrides
+
+Customize button tooltips and aria-labels via the `labels` prop. All 33 labels can be overridden.
+
+<EditorCustomLabelsDemo />
+
+```tsx
+<RichTextEditor
+  editor={editor}
+  labels={{
+    boldControlLabel: "Bold (B)",
+    italicControlLabel: "Italic (I)",
+    linkControlLabel: "🔗 Link",
+    h1ControlLabel: "Title",
+    bulletListControlLabel: "List",
+  }}
+>
+  ...
+</RichTextEditor>
+```
+
+## BlockEditor
+
+### Variants
+
+The BlockEditor supports `default` and `minimal` variants via the `variant` prop.
+
+<BlockEditorVariantsDemo />
+
+```tsx
+{/* default */}
+<BlockEditor editor={editor} variant="default" />
+
+{/* minimal */}
+<BlockEditor editor={editor} variant="minimal" />
+```
+
+### Scoped CSS Variables
+
+Same as the editor — wrap in a div with overridden shadcn tokens to theme a specific instance.
+
+<BlockEditorThemingDemo />
+
+```tsx
+<div style={{
+  "--primary": "oklch(0.55 0.25 280)",
+  "--radius": "0.5rem",
+  "--accent": "oklch(0.9 0.06 280)",
+}}>
+  <BlockEditor editor={editor} />
+</div>
+```
+
+### Root className
+
+Apply Tailwind classes to the root container for borders, shadows, and layout.
+
+<BlockEditorClassNameDemo />
+
+```tsx
+<BlockEditor
+  editor={editor}
+  className="border-2 border-dashed border-primary/50 rounded-xl"
+/>
+```
+
+### Custom Slash Commands
+
+Add your own items to the slash command (`/`) menu by passing custom items to `getSlashCommandSuggestion`.
+
+<BlockEditorCustomSlashCommandsDemo />
+
+```tsx
+import {
+  SlashCommand,
+  defaultSlashCommandItems,
+  getSlashCommandSuggestion,
+} from "@rtecn/block-editor";
+import type { SlashCommandSuggestionItem } from "@rtecn/block-editor";
+
+const customItems: SlashCommandSuggestionItem[] = [
+  {
+    id: "greeting",
+    title: "Greeting",
+    description: "Insert a friendly greeting.",
+    keywords: ["hello", "hi", "greeting"],
+    command: ({ editor, range }) => {
+      editor.chain().focus().deleteRange(range)
+        .insertContent("Hello there! 👋").run();
+    },
+  },
+  {
+    id: "image",
+    title: "Image",
+    description: "Insert an image.",
+    keywords: ["image", "img", "picture"],
+    command: ({ editor, range }) => {
+      const url = window.prompt("Enter image URL");
+      if (!url) return;
+      editor.chain().focus().deleteRange(range)
+        .setImage({ src: url }).run();
+    },
+  },
+];
+
+SlashCommand.configure({
+  suggestion: getSlashCommandSuggestion(customItems),
+});
+```
+
+Custom items appear at the top of the menu. Built-in items with the same `id` are replaced; all others are appended below your custom items.

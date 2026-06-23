@@ -13,11 +13,11 @@ Description: Notion-style block-based editor with slash commands, drag handles, 
 ## Installation
 
 ```bash
-pnpm add @rtecn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit
+pnpm add @rtecn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react
 ```
 
 ```bash
-npm install @rtecn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit
+npm install @rtecn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react
 ```
 
 After installation, import the editor styles at the root of your application:
@@ -287,27 +287,19 @@ Drag blocks to reorder them using the grip icon on the left. The drag handle use
 
 ## Extensions
 
-The BlockEditor uses these Tiptap extensions internally (they must be installed as peer dependencies):
+All `@tiptap/*` packages are **peer dependencies** — you must install them in your project. This ensures there is only one copy of Tiptap's types, avoiding "duplicate instance" TypeScript errors.
 
 | Extension | Purpose | Required |
 |-----------|---------|----------|
 | `@tiptap/starter-kit` | Core editor functionality | Yes |
 | `@tiptap/pm` | ProseMirror runtime | Yes |
 | `@tiptap/react` | React bindings | Yes |
+| `@tiptap/suggestion` | Slash command suggestion engine | Yes |
+| `@tiptap/extension-drag-handle-react` | Block drag handle UI | Yes |
+| `@tiptap/extension-code-block-lowlight` | Syntax highlighting (requires `lowlight`) | Optional |
+| `@tiptap/extension-placeholder` | Placeholder text | Optional |
 
-These extensions are bundled as direct dependencies:
-
-| Extension | Purpose |
-|-----------|---------|
-| `@tiptap/extension-drag-handle` | Block drag handle logic |
-| `@tiptap/extension-drag-handle-react` | React drag handle UI |
-| `@tiptap/extension-image` | Image block |
-| `@tiptap/extension-table` | Table block |
-| `@tiptap/extension-table-row` | Table row |
-| `@tiptap/extension-table-cell` | Table cell |
-| `@tiptap/extension-table-header` | Table header |
-| `@tiptap/suggestion` | Slash command suggestion engine |
-| `@tiptap/extension-code-block-lowlight` | (optional) Syntax highlighting |
+Extensions for **Image**, **Table**, **Link**, and others are not included — add them as needed for your custom slash commands.
 
 ## Syntax highlighting
 

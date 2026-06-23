@@ -29,7 +29,7 @@ import {
 } from 'lucide-react';
 import { createControl } from './rte-control';
 
-const iconProps = { className: 'h-4 w-4' };
+const iconProps = { className: 'rte-editor-icon' };
 
 export const BoldControl = createControl({
   label: 'boldControlLabel',

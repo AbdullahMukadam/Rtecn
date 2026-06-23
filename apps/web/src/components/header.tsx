@@ -27,6 +27,12 @@ export default function Header() {
         >
           GitHub
         </a>
+        <Link
+          href="/docs/customization"
+          className="text-sm text-muted-foreground no-underline transition-colors hover:text-foreground"
+        >
+          Customize
+        </Link>
         <ModeToggle />
       </nav>
     </header>

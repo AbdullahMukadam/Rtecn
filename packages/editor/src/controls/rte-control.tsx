@@ -31,7 +31,7 @@ export function RichTextEditorControl({
       disabled={disabled}
       aria-label={props["aria-label"]}
       title={props.title}
-      className={cn("h-8 w-8 p-0", className)}
+      className={cn("rte-control-button", className)}
       onMouseDown={(e) => {
         e.preventDefault();
         onMouseDown?.(e);
