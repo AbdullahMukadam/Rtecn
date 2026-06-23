@@ -2,7 +2,7 @@ import { Editor, Extension, type Range } from "@tiptap/core";
 import { PluginKey } from "@tiptap/pm/state";
 import Suggestion, { type SuggestionOptions } from "@tiptap/suggestion";
 
-type OnCommandSelect = (props: { editor: Editor; range: Range }) => void;
+export type OnCommandSelect = (props: { editor: Editor; range: Range }) => void;
 
 export interface SlashCommandSuggestionItem {
   id: string;

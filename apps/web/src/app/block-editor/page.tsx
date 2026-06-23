@@ -6,7 +6,45 @@ import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
-import { BlockEditor, SlashCommand, getSlashCommandSuggestion } from "@rtecn/block-editor";
+import Image from "@tiptap/extension-image";
+import Table from "@tiptap/extension-table";
+import TableRow from "@tiptap/extension-table-row";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import {
+  BlockEditor,
+  SlashCommand,
+  defaultSlashCommandItems,
+  getSlashCommandSuggestion,
+} from "@rtecn/block-editor";
+import type { SlashCommandSuggestionItem } from "@rtecn/block-editor";
+
+const myItems: SlashCommandSuggestionItem[] = [
+  ...defaultSlashCommandItems,
+  {
+    id: "image",
+    title: "Image",
+    description: "Insert an image.",
+    keywords: ["image", "img", "picture", "photo"],
+    command: ({ editor, range }) => {
+      const url = window.prompt("Enter image URL");
+      if (!url) return;
+      (editor.chain().focus() as any).deleteRange(range).setImage({ src: url }).run();
+    },
+  },
+  {
+    id: "table",
+    title: "Table",
+    description: "Insert a table.",
+    keywords: ["table", "grid"],
+    command: ({ editor, range }) => {
+      (editor.chain().focus() as any)
+        .deleteRange(range)
+        .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+        .run();
+    },
+  },
+];
 
 const content = `
 <h2>Welcome to the Block Editor</h2>
@@ -38,8 +76,13 @@ export default function BlockEditorPage() {
         types: ["heading", "paragraph"],
       }),
       Underline,
+      Table,
+      TableRow,
+      TableCell,
+      TableHeader,
+      Image,
       SlashCommand.configure({
-        suggestion: getSlashCommandSuggestion(),
+        suggestion: getSlashCommandSuggestion(myItems),
       }),
     ],
     content,

@@ -130,29 +130,6 @@ export const defaultSlashCommandItems: SlashCommandSuggestionItem[] = [
     command: ({ editor, range }) =>
       (editor.chain().focus() as any).deleteRange(range).setHorizontalRule().run(),
   },
-  {
-    id: "image",
-    title: "Image",
-    description: "Insert an image.",
-    keywords: ["image", "img", "picture", "photo"],
-    command: ({ editor, range }) => {
-      const url = window.prompt("Enter image URL");
-      if (!url) return;
-      (editor.chain().focus() as any).deleteRange(range).setImage({ src: url }).run();
-    },
-  },
-  {
-    id: "table",
-    title: "Table",
-    description: "Insert a table.",
-    keywords: ["table", "grid"],
-    command: ({ editor, range }) => {
-      (editor.chain().focus() as any)
-        .deleteRange(range)
-        .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-        .run();
-    },
-  },
 ];
 
 function updatePosition(editor: Editor, element: Element) {
@@ -175,10 +152,21 @@ function updatePosition(editor: Editor, element: Element) {
   });
 }
 
-export function getSlashCommandSuggestion(): SuggestionType {
+export function getSlashCommandSuggestion(
+  customItems?: SlashCommandSuggestionItem[],
+): SuggestionType {
+  const items = customItems
+    ? [
+        ...customItems,
+        ...defaultSlashCommandItems.filter(
+          (d) => !customItems.some((c) => c.id === d.id),
+        ),
+      ]
+    : defaultSlashCommandItems;
+
   return {
     items: ({ query }) => {
-      return defaultSlashCommandItems.filter((item) =>
+      return items.filter((item) =>
         item.keywords.some((k) => k.startsWith(query.toLowerCase())),
       );
     },

@@ -86,7 +86,7 @@ function useEditorState(
   selector: (e: Editor) => SelectorResult
 ): SelectorResult {
   const [state, setState] = useState<SelectorResult>(() => selector(editor));
-  useState(() => {
+  useEffect(() => {
     const update = () => setState(selector(editor));
     editor.on("selectionUpdate", update);
     editor.on("transaction", update);
@@ -94,7 +94,7 @@ function useEditorState(
       editor.off("selectionUpdate", update);
       editor.off("transaction", update);
     };
-  });
+  }, [editor, selector]);
   return state;
 }
 
@@ -192,7 +192,7 @@ function useTextEditorState(
   const [state, setState] = useState<TextSelectorResult>(() =>
     selector(editor)
   );
-  useState(() => {
+  useEffect(() => {
     const update = () => setState(selector(editor));
     editor.on("selectionUpdate", update);
     editor.on("transaction", update);
@@ -200,7 +200,7 @@ function useTextEditorState(
       editor.off("selectionUpdate", update);
       editor.off("transaction", update);
     };
-  });
+  }, [editor, selector]);
   return state;
 }
 
@@ -270,7 +270,7 @@ function useAlignEditorState(
   const [state, setState] = useState<AlignSelectorResult>(() =>
     selector(editor)
   );
-  useState(() => {
+  useEffect(() => {
     const update = () => setState(selector(editor));
     editor.on("selectionUpdate", update);
     editor.on("transaction", update);
@@ -278,7 +278,7 @@ function useAlignEditorState(
       editor.off("selectionUpdate", update);
       editor.off("transaction", update);
     };
-  });
+  }, [editor, selector]);
   return state;
 }
 
@@ -466,32 +466,49 @@ function deleteBlock(editor: Editor) {
   editor.chain().focus().deleteRange({ from: start, to: end }).run();
 }
 
+// BubbleMenu location differs between Tiptap v2 and v3:
+// v2: @tiptap/react  v3: @tiptap/react/menus
+// Eagerly start loading at module scope so the import resolves ASAP
+let BubbleMenuComponent: any = null;
+
+const bubbleMenuPromise = (async () => {
+  try {
+    // @ts-ignore - @tiptap/react/menus only exists in v3
+    const mod = await import("@tiptap/react/menus");
+    BubbleMenuComponent = mod.BubbleMenu;
+  } catch {
+    try {
+      const mod = await import("@tiptap/react");
+      BubbleMenuComponent = mod.BubbleMenu;
+    } catch {
+      // No Tiptap BubbleMenu available (unlikely since @tiptap/react is a peer dep)
+    }
+  }
+})();
+
 export function BubbleMenu({ editor }: BubbleMenuProps) {
-  const [BubbleComp, setBubbleComp] = useState<any>(null);
+  const [loaded, setLoaded] = useState(BubbleMenuComponent !== null);
 
   useEffect(() => {
+    if (BubbleMenuComponent !== null) {
+      setLoaded(true);
+      return;
+    }
     let active = true;
-    (async () => {
-      try {
-        // @ts-ignore - v3 has BubbleMenu in @tiptap/react/menus, v2 has it in @tiptap/react
-        const mod = await import("@tiptap/react/menus");
-        if (active) setBubbleComp(() => mod.BubbleMenu);
-      } catch {
-        const mod = await import("@tiptap/react");
-        if (active) setBubbleComp(() => mod.BubbleMenu);
-      }
-    })();
+    bubbleMenuPromise.then(() => {
+      if (active) setLoaded(true);
+    });
     return () => { active = false; };
   }, []);
 
-  if (!editor || !BubbleComp) return null;
+  if (!editor || !BubbleMenuComponent || !loaded) return null;
 
   const hasTextAlign = editor.extensionManager.extensions.some(
     (ext) => (ext as any).name === "textAlign"
   );
 
   return (
-    <BubbleComp
+    <BubbleMenuComponent
       editor={editor as any}
       tippyOptions={{ placement: "top", offset: [0, 8] }}
       shouldShow={({ editor: ed, state }: { editor: Editor; state: any }) => {
@@ -515,7 +532,7 @@ export function BubbleMenu({ editor }: BubbleMenuProps) {
           </>
         )}
       </div>
-    </BubbleComp>
+    </BubbleMenuComponent>
   );
 }
 

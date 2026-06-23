@@ -7,13 +7,25 @@ import Underline from "@tiptap/extension-underline";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import TextAlign from "@tiptap/extension-text-align";
+import TableKit from "@tiptap/extension-table";
+import TableRow from "@tiptap/extension-table-row";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
+import CodeBlock from '@tiptap/extension-code-block'
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { common, createLowlight } from "lowlight";
 import {
   BlockEditor,
   SlashCommand,
+  defaultSlashCommandItems,
   getSlashCommandSuggestion,
 } from "@rtecn/block-editor";
-import type { BlockEditorVariant } from "@rtecn/block-editor";
+import type {
+  BlockEditorVariant,
+  SlashCommandSuggestionItem,
+} from "@rtecn/block-editor";
 import "@rtecn/block-editor/style.css";
 
 const DEMO_CONTENT = `
@@ -34,28 +46,78 @@ const DEMO_CONTENT = `
 <blockquote><p>Block-level content with drag handles for reordering.</p></blockquote>
 `.trim();
 
+const myItems: SlashCommandSuggestionItem[] = [
+  ...defaultSlashCommandItems,
+  {
+    id: "custom",
+    title: "Custom",
+    description: "A custom command",
+    keywords: ["custom"],
+    command: ({ editor, range }) => {
+      editor.chain().focus().deleteRange(range).insertContent("Hello!").run();
+    },
+  },
+  {
+    id: "image",
+    title: "Image",
+    description: "Insert an image.",
+    keywords: ["image", "img", "picture", "photo"],
+    command: ({ editor, range }) => {
+      const url = window.prompt("Enter image URL");
+      if (!url) return;
+      (editor.chain().focus() as any)
+        .deleteRange(range)
+        .setImage({ src: url })
+        .run();
+    },
+  },
+  {
+    id: "table",
+    title: "Table",
+    description: "Insert a table.",
+    keywords: ["table", "grid"],
+    command: ({ editor, range }) => {
+      (editor.chain().focus() as any)
+        .deleteRange(range)
+        .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+        .run();
+    },
+  },
+];
+
+const lowlight = createLowlight(common);
+
 export function BlockEditorPreview({
   variant = "default",
 }: {
   variant?: BlockEditorVariant;
 }) {
+
   const editor = useEditor({
     immediatelyRender: false,
     shouldRerenderOnTransaction: false,
     extensions: [
       StarterKit.configure({
         heading: { levels: [1, 2, 3] },
+        codeBlock: false,
       }),
       Placeholder.configure({ placeholder: "Type / for commands..." }),
       Underline,
       TaskList,
       TaskItem.configure({ nested: true }),
+      CodeBlock,
+      CodeBlockLowlight.configure({ lowlight}),
       SlashCommand.configure({
-        suggestion: getSlashCommandSuggestion(),
+        suggestion: getSlashCommandSuggestion(myItems),
       }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
+      TableKit,
+      TableRow,
+      TableCell,
+      TableHeader,
+      Image,
       Link.configure({
         openOnClick: true,
         autolink: true,
