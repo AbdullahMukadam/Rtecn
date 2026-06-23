@@ -473,6 +473,7 @@ export function BubbleMenu({ editor }: BubbleMenuProps) {
     let active = true;
     (async () => {
       try {
+        // @ts-ignore - v3 has BubbleMenu in @tiptap/react/menus, v2 has it in @tiptap/react
         const mod = await import("@tiptap/react/menus");
         if (active) setBubbleComp(() => mod.BubbleMenu);
       } catch {
