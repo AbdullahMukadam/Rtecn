@@ -1,5 +1,6 @@
 import { computePosition, flip, shift } from "@floating-ui/dom";
-import { Editor, posToDOMRect, ReactRenderer } from "@tiptap/react";
+import { Editor, ReactRenderer } from "@tiptap/react";
+import { posToDOMRect } from "@tiptap/core";
 import type { SuggestionOptions } from "@tiptap/suggestion";
 import type { SlashCommandSuggestionItem } from "./slash-command";
 import SuggestionList, {

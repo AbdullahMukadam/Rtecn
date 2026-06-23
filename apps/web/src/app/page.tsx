@@ -147,9 +147,6 @@ export default function HomePage() {
 
       <main className="flex-1">
         <section className="mx-auto flex max-w-3xl flex-col items-center px-8 pt-24 pb-16 text-center">
-          <span className="mb-6 inline-flex h-7 items-center gap-1.5 rounded-full bg-muted px-3 text-xs font-medium tracking-wider text-foreground">
-            v0.1.0
-          </span>
 
           <h1 className="text-5xl font-medium leading-tight tracking-tighter text-foreground sm:text-6xl">
             Rich text editors

@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback } from "react";
-import { BubbleMenu as TiptapBubbleMenu, type Editor } from "@tiptap/react";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { type Editor } from "@tiptap/react";
 import { isTextSelection } from "@tiptap/core";
 
 interface BubbleMenuProps {
@@ -467,17 +467,33 @@ function deleteBlock(editor: Editor) {
 }
 
 export function BubbleMenu({ editor }: BubbleMenuProps) {
-  if (!editor) return null;
+  const [BubbleComp, setBubbleComp] = useState<any>(null);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const mod = await import("@tiptap/react/menus");
+        if (active) setBubbleComp(() => mod.BubbleMenu);
+      } catch {
+        const mod = await import("@tiptap/react");
+        if (active) setBubbleComp(() => mod.BubbleMenu);
+      }
+    })();
+    return () => { active = false; };
+  }, []);
+
+  if (!editor || !BubbleComp) return null;
 
   const hasTextAlign = editor.extensionManager.extensions.some(
     (ext) => (ext as any).name === "textAlign"
   );
 
   return (
-    <TiptapBubbleMenu
+    <BubbleComp
       editor={editor as any}
       tippyOptions={{ placement: "top", offset: [0, 8] }}
-      shouldShow={({ editor: ed, state }) => {
+      shouldShow={({ editor: ed, state }: { editor: Editor; state: any }) => {
         const { selection } = state;
         if (!ed.isEditable) return false;
         if (selection.empty) return false;
@@ -498,7 +514,7 @@ export function BubbleMenu({ editor }: BubbleMenuProps) {
           </>
         )}
       </div>
-    </TiptapBubbleMenu>
+    </BubbleComp>
   );
 }
 
