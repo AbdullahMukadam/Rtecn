@@ -234,7 +234,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-4xl space-y-12 px-8 pb-24">
+        <section className="mx-auto max-w-4xl space-y-12 px-4 md:px-8 pb-24">
           <EditorSection
             type="editor"
             title="@rtecn/editor"

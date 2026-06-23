@@ -202,24 +202,31 @@ export function EditorCustomControlsDemo() {
 
 export function EditorReadOnlyDemo() {
   const [isEditable, setIsEditable] = useState(true);
-  const editor = useEditor({ immediatelyRender: false, shouldRerenderOnTransaction: false, editable: isEditable, extensions, content: EDITOR_CONTENT });
+  const editor = useEditor({ immediatelyRender: false, shouldRerenderOnTransaction: false, extensions, content: EDITOR_CONTENT });
+
+  const toggle = () => {
+    if (!editor) return;
+    const next = !editor.isEditable;
+    editor.setEditable(next);
+    setIsEditable(next);
+  };
 
   return (
     <div className="space-y-4">
       <button
         type="button"
         className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
-        onClick={() => setIsEditable((p) => !p)}
+        onClick={toggle}
       >
         {isEditable ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4" />}
         {isEditable ? "Switch to Read-only" : "Switch to Editable"}
       </button>
       <RichTextEditor editor={editor}>
-        {isEditable && (
-          <RichTextEditor.Toolbar>
+        <RichTextEditor.Toolbar>
+          <div className="flex items-center gap-2" data-editable={isEditable}>
             <EditorToolbar />
-          </RichTextEditor.Toolbar>
-        )}
+          </div>
+        </RichTextEditor.Toolbar>
         <RichTextEditor.Content />
       </RichTextEditor>
     </div>

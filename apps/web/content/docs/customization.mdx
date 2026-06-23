@@ -125,19 +125,23 @@ function InsertStar() {
 
 ### Read-only Mode
 
-Toggle the editor between editable and read-only using Tiptap's `editable` prop.
+Toggle the editor between editable and read-only using `editor.setEditable()`.
 
 <EditorReadOnlyDemo />
 
 ```tsx
 const [isEditable, setIsEditable] = useState(true);
 const editor = useEditor({
-  editable: isEditable,
   extensions: [...],
 });
 
-// Toggle:
-<button onClick={() => setIsEditable(!isEditable)}>
+const toggle = () => {
+  const next = !editor.isEditable;
+  editor.setEditable(next);
+  setIsEditable(next);
+};
+
+<button onClick={toggle}>
   {isEditable ? "Switch to Read-only" : "Switch to Editable"}
 </button>
 ```
