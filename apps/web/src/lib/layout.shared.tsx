@@ -5,5 +5,6 @@ export function baseOptions(): BaseLayoutProps {
     nav: {
       title: 'Rtecn',
     },
+    githubUrl: "https://github.com/AbdullahMukadam/Rtecn"
   };
 }

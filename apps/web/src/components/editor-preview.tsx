@@ -31,7 +31,7 @@ const DEMO_CONTENT = `
 <h1 style="text-align: center;">Rich Text Editing</h1>
 <h2>Formatting</h2>
 <p>Use the toolbar above to apply <strong>bold</strong>, <em>italic</em>, <u>underline</u>, <s>strikethrough</s>, <mark>highlighted</mark>, and <code>inline code</code>.</p>
-<h2>Lists &amp; Quotes</h2>
+<h2>Lists</h2>
 <ul>
   <li>Unordered list item</li>
   <li>Another item with <strong>bold text</strong></li>
@@ -40,7 +40,6 @@ const DEMO_CONTENT = `
   <li>First ordered item</li>
   <li>Second ordered item</li>
 </ol>
-<blockquote><p>A well-known quote that lives inside a blockquote element.</p></blockquote>
 <h2>Links &amp; Alignment</h2>
 <p style="text-align: center;">This text is center aligned. Try the alignment controls in the toolbar.</p>
 `.trim();
@@ -65,7 +64,7 @@ export function EditorPreview({ variant = "default" }: { variant?: RichTextEdito
   });
 
   return (
-    <div className="overflow-hidden rounded-md border border-border">
+    <div className="overflow-hidden rounded-md border border-border font-inter [&_.ProseMirror]:text-[15px]">
       <RichTextEditor editor={editor} variant={variant}>
         <RichTextEditor.Toolbar>
           <RichTextEditor.ControlsGroup>

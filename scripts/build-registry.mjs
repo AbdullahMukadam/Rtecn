@@ -10,10 +10,12 @@ function read(pkg, file) {
 }
 
 function entry(path, type, pkg, src) {
-  return { path, type, content: read(pkg, src) };
+  const target = `@components/${path}`;
+  return { path, type, target, content: read(pkg, src) };
 }
 
 const editorFiles = [
+  entry("rte-editor/index.ts", "registry:component", "editor", "index.ts"),
   entry("rte-editor/rte-text-editor.tsx", "registry:component", "editor", "rte-text-editor.tsx"),
   entry("rte-editor/rte-context.ts", "registry:component", "editor", "rte-context.ts"),
   entry("rte-editor/rte-toolbar.tsx", "registry:component", "editor", "rte-toolbar.tsx"),
@@ -35,6 +37,7 @@ const editorFiles = [
 ];
 
 const blockEditorFiles = [
+  entry("rte-block-editor/index.ts", "registry:component", "block-editor", "index.ts"),
   entry("rte-block-editor/block-editor.tsx", "registry:component", "block-editor", "block-editor.tsx"),
   entry("rte-block-editor/block-actions.tsx", "registry:component", "block-editor", "block-actions.tsx"),
   entry("rte-block-editor/bubble-menu.tsx", "registry:component", "block-editor", "bubble-menu.tsx"),

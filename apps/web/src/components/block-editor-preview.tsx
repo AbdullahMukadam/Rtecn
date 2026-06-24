@@ -194,7 +194,7 @@ export function BlockEditorPreview({
   });
 
   return (
-    <div className="overflow-hidden rounded-md border border-border">
+    <div className="overflow-hidden rounded-md border border-border font-inter [&_.ProseMirror]:text-[15px]">
       <BlockEditor editor={editor} variant={variant} />
     </div>
   );

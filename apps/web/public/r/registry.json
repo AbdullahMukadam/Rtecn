@@ -29,6 +29,10 @@
       ],
       "files": [
         {
+          "path": "rte-editor/index.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "rte-editor/rte-text-editor.tsx",
           "type": "registry:component"
         },
@@ -136,6 +140,10 @@
         "tailwind-merge@^3.0.0"
       ],
       "files": [
+        {
+          "path": "rte-block-editor/index.ts",
+          "type": "registry:component"
+        },
         {
           "path": "rte-block-editor/block-editor.tsx",
           "type": "registry:component"

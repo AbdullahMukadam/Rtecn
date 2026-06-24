@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Montserrat, Fira_Code  } from "next/font/google";
+import { Montserrat, Fira_Code, Inter } from "next/font/google";
 import { RootProvider } from "fumadocs-ui/provider/next";
 
 import "../index.css";
@@ -10,14 +10,19 @@ const fontSans = Montserrat({
   variable: "--font-sans",
 });
 
-// const fontSerif = Georgia({
-//   subsets: ["latin"],
-//   variable: "--font-serif",
-// });
+const fontSerif = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-serif",
+});
 
 const fontMono = Fira_Code({
   subsets: ["latin"],
   variable: "--font-mono",
+});
+
+const fontInter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 
@@ -34,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${fontSans.variable} ${fontMono.variable} antialiased flex flex-col min-h-screen`}
+        className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} ${fontInter.variable} antialiased flex flex-col min-h-screen`}
       >
         <RootProvider theme={{ enabled: false }}>
           <Providers>{children}</Providers>

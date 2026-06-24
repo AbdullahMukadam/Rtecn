@@ -280,6 +280,20 @@ button.rte-control-button {
   position: sticky;
 }
 
+@media (max-width: 640px) {
+  .rte-toolbar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .rte-toolbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* ── Default variant: joined bordered buttons ── */
 .rte-root[data-variant="default"] .rte-controls-group {
   display: flex;

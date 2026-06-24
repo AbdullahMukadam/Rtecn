@@ -1,93 +1,85 @@
-# shadcn-RTE
+# Rtecn
 
-This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines Next.js, Self, and more.
+Rich text editor components for [shadcn/ui](https://ui.shadcn.com/) projects, built on [Tiptap](https://tiptap.dev/).
 
-## Features
+Two editor variants are available via the [shadcn registry](https://ui.shadcn.com/docs/registry):
 
-- **TypeScript** - For type safety and improved developer experience
-- **Next.js** - Full-stack React framework
-- **TailwindCSS** - Utility-first CSS for rapid UI development
-- **Shared UI package** - shadcn/ui primitives live in `packages/ui`
-- **Turborepo** - Optimized monorepo build system
+| Package | Description |
+|---------|-------------|
+| [`@rtecn/editor`](https://rtecn.space/docs/editor) | Toolbar-style rich text editor with 20+ built-in controls |
+| [`@rtecn/block-editor`](https://rtecn.space/docs/block-editor) | Notion-style block editor with slash commands, drag handles, and bubble menu |
 
-## Getting Started
+## Quick start
 
-First, install the dependencies:
-
-```bash
-pnpm install
-```
-
-Then, run the development server:
-
-```bash
-pnpm run dev
-```
-
-Open [http://localhost:3001](http://localhost:3001) in your browser to see the fullstack application.
-
-## UI Customization
-
-React web apps in this stack share shadcn/ui primitives through `packages/ui`.
-
-- Change design tokens and global styles in `packages/ui/src/styles/globals.css`
-- Update shared primitives in `packages/ui/src/components/*`
-- Adjust shadcn aliases or style config in `packages/ui/components.json` and `apps/web/components.json`
-
-### Add more shared components
-
-Run this from the project root to add more primitives to the shared UI package:
-
-```bash
-npx shadcn@latest add accordion dialog popover sheet table -c packages/ui
-```
-
-Import shared components like this:
-
-```tsx
-import { Button } from "@shadcn-RTE/ui/components/button";
-```
-
-### Add app-specific blocks
-
-If you want to add app-specific blocks instead of shared primitives, run the shadcn CLI from `apps/web`.
-
-## Project Structure
-
-```
-shadcn-RTE/
-├── apps/
-│   └── web/         # Fullstack application (Next.js) + registry
-├── packages/
-│   ├── editor/      # @rtecn/editor — toolbar-style rich text editor
-│   ├── block-editor/ # @rtecn/block-editor — block-type editor
-│   └── ui/          # Shared shadcn/ui components and styles
-```
-
-## Registry Installation
-
-Both editor packages are available via the shadcn registry. Add the rtecn registry to your `components.json`:
+Add the rtecn registry to your `components.json`:
 
 ```json
 {
-  "importPaths": {
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "registries": {
     "@rtecn": "https://rtecn.space/r/{name}.json"
   }
 }
 ```
 
-Then install either package:
+Install an editor:
 
 ```bash
 npx shadcn@latest add @rtecn/editor
 npx shadcn@latest add @rtecn/block-editor
 ```
 
-The registry is built from source via `pnpm build:registry`.
+Then install the Tiptap peer dependencies and import the components. See the [registry docs](https://rtecn.space/docs/registry) for full usage instructions.
 
-## Available Scripts
+## npm
 
-- `pnpm run dev`: Start all applications in development mode
-- `pnpm run build`: Build all applications
-- `pnpm run dev:web`: Start only the web application
-- `pnpm run check-types`: Check TypeScript types across all apps
+Both packages are also available on npm:
+
+```bash
+npm install @rtecn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link
+```
+
+```bash
+npm install @rtecn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react
+```
+
+## Documentation
+
+Full documentation is available at [rtecn.space](https://rtecn.space/docs):
+
+- [Getting started](https://rtecn.space/docs/getting-started)
+- [Editor API](https://rtecn.space/docs/editor)
+- [Block Editor API](https://rtecn.space/docs/block-editor)
+- [Customization](https://rtecn.space/docs/customization)
+- [Registry](https://rtecn.space/docs/registry)
+
+## Project structure
+
+```
+shadcn-RTE/
+├── apps/
+│   └── web/               # Documentation site (Next.js) + registry JSON
+├── packages/
+│   ├── editor/            # @rtecn/editor — toolbar-style editor
+│   ├── block-editor/      # @rtecn/block-editor — block-type editor
+│   └── ui/                # Shared shadcn/ui primitives (button, popover, etc.)
+└── scripts/
+    └── build-registry.mjs # Builds registry JSON from source files
+```
+
+## Development
+
+```bash
+pnpm install
+pnpm run dev              # Start all apps in development mode
+pnpm run dev:web          # Start only the documentation site
+pnpm run build:registry   # Rebuild registry JSON files
+```
+
+## Built with
+
+- [Tiptap](https://tiptap.dev/) — Headless rich text editor framework
+- [shadcn/ui](https://ui.shadcn.com/) — Component primitives and design tokens
+- [Next.js](https://nextjs.org/) — React framework
+- [Turborepo](https://turbo.build/repo) — Monorepo tooling
+- [TypeScript](https://www.typescriptlang.org/) — Type safety
