@@ -195,7 +195,7 @@ export function BlockEditorPreview({
 
   return (
     <div className=" rounded-md border border-border font-inter [&_.ProseMirror]:text-[15px]">
-      <BlockEditor editor={editor} variant={variant} />
+      <BlockEditor editor={editor} variant={variant} className="px-2" />
     </div>
   );
 }

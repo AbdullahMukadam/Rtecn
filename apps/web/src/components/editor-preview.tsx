@@ -115,7 +115,7 @@ export function EditorPreview({ variant = "default" }: { variant?: RichTextEdito
             <RichTextEditor.Redo />
           </RichTextEditor.ControlsGroup>
         </RichTextEditor.Toolbar>
-        <RichTextEditor.Content />
+        <RichTextEditor.Content className="px-2" />
       </RichTextEditor>
     </div>
   );
