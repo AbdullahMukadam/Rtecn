@@ -1,12 +1,12 @@
 "use client";
 
-import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
 import { GITHUB_URL } from "@/app/page";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 const navLinks = [
   { href: "/docs", label: "Docs" },
@@ -15,11 +15,10 @@ const navLinks = [
 ];
 
 export default function Header() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  // Prevent scrolling when mobile menu is open
-  React.useEffect(() => {
+  useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
     } else {
@@ -30,8 +29,7 @@ export default function Header() {
     };
   }, [open]);
 
-  // Close on route change
-  React.useEffect(() => {
+  useEffect(() => {
     setOpen(false);
   }, [pathname]);
 
@@ -39,7 +37,7 @@ export default function Header() {
     <header className="flex h-12 items-center justify-between border-b border-border px-4 sm:px-8">
       <Link
         href="/"
-        className="relative z-50 text-sm font-medium tracking-tight text-foreground no-underline"
+        className="relative z-50 text-base font-medium tracking-tight text-foreground no-underline"
       >
         Rtecn
       </Link>

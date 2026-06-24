@@ -31,7 +31,7 @@ Make sure your `components.json` includes the rtecn registry:
 
 ```json
 {
-  "importPaths": {
+  "registries": {
     "@rtecn": "https://rtecn.space/r/{name}.json"
   }
 }

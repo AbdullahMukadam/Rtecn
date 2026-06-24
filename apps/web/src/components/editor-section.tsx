@@ -69,7 +69,7 @@ export function EditorSection(props: EditorSectionProps) {
           {props.badge}
         </span>
       </div>
-      <p className="mb-4 text-sm text-muted-foreground">{props.description}</p>
+      <p className="mb-4 text-base text-muted-foreground">{props.description}</p>
 
       <div className="mb-3 flex gap-1">
         {variants.map((v) => (

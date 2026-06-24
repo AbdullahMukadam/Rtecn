@@ -257,7 +257,7 @@ export default function HomePage() {
       </main>
 
       <footer className="flex h-12 items-center justify-between border-t border-border px-8 text-xs text-muted-foreground">
-        <span>rtecn</span>
+        <span>Rtecn</span>
         <span>MIT License</span>
       </footer>
     </div>
