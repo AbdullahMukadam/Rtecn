@@ -387,7 +387,7 @@ button.rte-control-button {
   background-color: var(--accent);
   color: var(--accent-foreground);
 }
-.rte-root[data-variant="compact"] .rte-controls-group > button svg {
+.rte-root[data-variant="compact"] .rte-editor-icon {
   height: 0.75rem;
   width: 0.75rem;
 }

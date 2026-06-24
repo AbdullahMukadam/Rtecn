@@ -14,7 +14,7 @@ The editors don't hardcode colors, spacing, or fonts. Instead, they reference CS
 These variables are defined in your shadcn globals:
 
 ```css
-/* packages/ui/src/styles/globals.css */
+/* globals.css */
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.2686 0 0);
@@ -136,65 +136,316 @@ Every component accepts a `className` prop that merges with the default classes 
 <BlockEditor editor={editor} className="max-w-3xl mx-auto" />
 ```
 
-## Overriding editor CSS classes
+## CSS class reference
 
-If you need deeper control, override the editors' CSS classes:
+<Callout type="warning">
+  **Override not applying?** Editor styles are loaded from JS imports, which can affect CSS cascade order. If a simple class override doesn't work, add `!important`:
+
+  ```css
+  .rte-editor-icon { width: 1.25rem !important; height: 1.25rem !important; }
+  ```
+</Callout>
+
+Every editor element has a scoped CSS class. Override any of these in your stylesheet to customize specific parts.
 
 ### @rtecn/editor
 
-All classes are prefixed with `rte-`:
-
-```css
-/* Change toolbar background */
-.rte-toolbar {
-  background-color: var(--muted);
-}
-
-/* Increase content min-height */
-.rte-content .ProseMirror {
-  min-height: 300px;
-}
-
-/* Style inline code differently */
-.rte-content .ProseMirror code {
-  background-color: var(--accent);
-  color: var(--accent-foreground);
-}
-
-/* Style task list checkboxes */
-.rte-task-list input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-}
-```
+| Class | What it styles |
+|-------|----------------|
+| `.rte-root` | Editor container (border, background, border-radius) |
+| `.rte-toolbar` | Toolbar bar (layout, sticky support) |
+| `.rte-toolbar--subtle` | Toolbar in subtle variant |
+| `.rte-toolbar--compact` | Toolbar in compact variant |
+| `.rte-controls-group` | Group of controls in the toolbar |
+| `button.rte-control-button` | Individual control buttons |
+| `.rte-editor-icon` | Icons inside control buttons |
+| `.rte-content .ProseMirror` | Content editing area |
+| `.rte-content .ProseMirror p` | Paragraphs |
+| `.rte-content .ProseMirror h1`–`h6` | Headings |
+| `.rte-content .ProseMirror ul` | Unordered lists |
+| `.rte-content .ProseMirror ol` | Ordered lists |
+| `.rte-content .ProseMirror li` | List items |
+| `.rte-content .ProseMirror blockquote` | Blockquotes |
+| `.rte-content .ProseMirror code` | Inline code |
+| `.rte-content .ProseMirror pre` | Code blocks |
+| `.rte-content .ProseMirror hr` | Horizontal rules |
+| `.rte-content .ProseMirror a` | Links |
+| `.rte-content .ProseMirror pre .hljs-*` | Syntax highlighting tokens |
+| `.rte-link-editor` | Link editor popover |
+| `.rte-link-editor-input` | Link URL input field |
+| `.rte-link-editor-save` | Link save button |
+| `.rte-task-list` | Task list container |
+| `.rte-task-list li` | Task list items |
+| `.rte-task-list input[type="checkbox"]` | Task checkboxes |
 
 ### @rtecn/block-editor
 
-All classes are prefixed with `block-editor-`:
+| Class | What it styles |
+|-------|----------------|
+| `.block-editor` | Editor container |
+| `.block-editor-content .ProseMirror` | Content editing area |
+| `.block-editor-content .ProseMirror p` | Paragraphs |
+| `.block-editor-content .ProseMirror h1`–`h3` | Headings |
+| `.block-editor-content .ProseMirror ul`, `ol` | Lists |
+| `.block-editor-content .ProseMirror li` | List items |
+| `.block-editor-content .ProseMirror blockquote` | Blockquotes |
+| `.block-editor-content .ProseMirror code` | Inline code |
+| `.block-editor-content .ProseMirror pre` | Code blocks |
+| `.block-editor-content .ProseMirror hr` | Horizontal rules |
+| `.block-editor-content .ProseMirror img` | Images |
+| `.block-editor-content .ProseMirror table`, `th`, `td` | Tables |
+| `.block-editor-content .ProseMirror .tableWrapper` | Table horizontal scroll wrapper |
+| `.block-editor-content .ProseMirror ul[data-type="taskList"]` | Task lists |
+| `.drag-handle` | Block drag handle |
+| `.block-editor-block-actions` | Block actions menu container |
+| `.block-editor-block-actions-trigger` | Block actions trigger button (grip icon) |
+| `.block-editor-block-actions-dropdown` | Block actions dropdown |
+| `.block-editor-block-actions-item` | Block actions dropdown items |
+| `.block-editor-bubble-menu` | Floating bubble menu |
+| `.block-editor-bubble-group` | Bubble menu button group |
+| `.block-editor-bubble-btn` | Bubble menu buttons |
+| `.block-editor-bubble-btn-text` | Bubble menu button text label |
+| `.block-editor-bubble-separator` | Bubble menu separator lines |
+| `.block-editor-bubble-dropdown` | Bubble menu dropdown |
+| `.block-editor-bubble-dropdown-item` | Dropdown items (heading select, align, etc.) |
+| `.block-editor-slash-menu` | Slash command popup |
+| `.block-editor-slash-menu-list` | Slash command list container |
+| `.block-editor-slash-menu-item` | Slash command items |
+| `.block-editor-slash-menu-item--selected` | Selected slash command item |
+| `.block-editor-slash-menu-item-content` | Slash command item content wrapper |
+| `.block-editor-slash-menu-item-label` | Slash command item title |
+| `.block-editor-slash-menu-item-desc` | Slash command item description |
+| `.block-editor-slash-menu-empty` | Slash command empty state |
+| `.block-editor-link-form` | Link form inside bubble menu |
+| `.block-editor-link-input` | Link URL input |
+| `.block-editor-link-actions` | Link action buttons row |
+| `.block-editor-btn` | Base button style (used in actions, alerts) |
+| `.block-editor-btn--primary`, `--ghost`, `--outline`, `--danger`, `--secondary` | Button variants |
+| `.block-editor-btn--sm`, `--md`, `--lg`, `--icon` | Button sizes |
+| `.block-editor-label` | Form label |
+| `.block-editor-textarea` | Textarea (used in code block source editing) |
+| `.block-editor-scroll-area` | Scrollable container |
+| `.block-editor-alert` | Alert box |
+
+## Common customizations
+
+### Change icon size
+
+Icons in the toolbar are rendered inside `.rte-editor-icon`. Override their size:
 
 ```css
-/* Style the bubble menu */
-.block-editor-bubble-menu {
-  background-color: var(--popover);
-  border: 1px solid var(--border);
+.rte-editor-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+```
+
+Or for a specific variant:
+
+```css
+/* Compact variant icons are already smaller */
+.rte-root[data-variant="compact"] .rte-editor-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+```
+
+### Change control button size
+
+```css
+/* All variants */
+button.rte-control-button {
+  width: 2.25rem;
+  height: 2.25rem;
 }
 
-/* Style slash command items */
-.block-editor-slash-menu-item--selected {
-  background-color: var(--accent);
+/* Only default variant */
+.rte-root[data-variant="default"] .rte-controls-group > button {
+  min-width: 2rem;
+  height: 2rem;
+}
+```
+
+### Change paragraph font size
+
+```css
+.rte-content .ProseMirror p {
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+```
+
+For the block editor:
+
+```css
+.block-editor-content .ProseMirror p {
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+```
+
+### Change heading sizes
+
+```css
+.rte-content .ProseMirror h1 {
+  font-size: 2rem;
+}
+.rte-content .ProseMirror h2 {
+  font-size: 1.5rem;
+}
+.rte-content .ProseMirror h3 {
+  font-size: 1.25rem;
+}
+```
+
+### Change content area min-height
+
+```css
+.rte-content .ProseMirror {
+  min-height: 400px;
+}
+```
+
+### Change toolbar button gap
+
+```css
+.rte-toolbar {
+  gap: 0.5rem;
+}
+```
+
+### Customize code blocks
+
+```css
+.rte-content .ProseMirror pre {
+  background-color: #1e1e2e;
+  color: #cdd6f4;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  font-size: 0.8125rem;
+}
+```
+
+### Customize link editor popover
+
+```css
+.rte-link-editor {
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.rte-link-editor-input {
+  min-width: 250px;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 2px);
+}
+```
+
+### Customize task checkboxes
+
+```css
+.rte-task-list input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+```
+
+### Customize the bubble menu (block editor)
+
+```css
+.block-editor-bubble-menu {
+  height: 2.5rem;
+  padding: 0 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.block-editor-bubble-btn {
+  height: 2rem;
+  padding: 0 0.5rem;
+  font-size: 0.875rem;
+}
+
+.block-editor-bubble-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+```
+
+### Customize the slash command menu
+
+```css
+.block-editor-slash-menu {
+  max-height: 400px;
+  min-width: 240px;
+}
+
+.block-editor-slash-menu-item {
+  padding: 0.625rem 0.75rem;
+}
+
+.block-editor-slash-menu-item-label {
+  font-size: 0.875rem;
+}
+
+.block-editor-slash-menu-item-desc {
+  font-size: 0.8125rem;
+}
+```
+
+### Change block editor heading sizes
+
+```css
+.block-editor-content .ProseMirror h1 {
+  font-size: 2rem;
+}
+
+.block-editor-content .ProseMirror h2 {
+  font-size: 1.625rem;
+}
+
+.block-editor-content .ProseMirror h3 {
+  font-size: 1.375rem;
+}
+```
+
+### Customize drag handle
+
+```css
+.drag-handle {
+  width: 1.5rem;
+  height: 1.75rem;
+  opacity: 1;
+  color: var(--muted-foreground);
+}
+
+.drag-handle:hover {
+  background: var(--accent);
   color: var(--accent-foreground);
 }
+```
 
-/* Style code blocks */
-.block-editor-content .ProseMirror pre {
-  background-color: #1e1e2e;
-  border-radius: var(--radius);
+## Variant-specific overrides
+
+Both editors support `data-variant` attribute on the root element. Use it to target specific variants:
+
+```css
+/* Target subtle variant */
+.rte-root[data-variant="subtle"] {
+  border-color: transparent;
 }
 
-/* Adjust heading sizes */
-.block-editor-content .ProseMirror h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
+/* Target compact variant */
+.rte-root[data-variant="compact"] .rte-controls-group > button {
+  min-width: 1.75rem;
+  height: 1.75rem;
+}
+
+/* Target minimal variant (block editor) */
+[data-variant="minimal"] .block-editor-content .ProseMirror {
+  background-color: var(--muted);
+  padding: 1.5rem;
 }
 ```
 

@@ -1,3 +1,8 @@
 @import "@rtecn/ui/globals.css";
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
+
+.rte-root .rte-editor-icon {
+  width: 18px !important;
+  height: 18px !important;
+}
