@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { Button } from "@rtecn/ui/components/button";
 import { EditorSection } from "@/components/editor-section";
+import {
+  IconsPreview,
+  ThemePreview,
+  ControlsPreview,
+  ThemeCard,
+} from "@/components/landing-previews";
 import Header from "@/components/header";
 
 export const GITHUB_URL = "https://github.com/AbdullahMukadam/Rtecn";
@@ -253,6 +259,62 @@ export default function HomePage() {
             codeData={blockEditorCodeData}
             docsHref="/docs/block-editor"
           />
+        </section>
+
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-6xl space-y-12 px-4 md:px-8 py-24">
+            <div>
+              <h2 className="mb-2 text-lg font-medium tracking-tight text-foreground">
+                Customize everything
+              </h2>
+              <p className="text-base text-muted-foreground">
+                Icons, colors, controls — every part of the editor is yours to
+                shape.
+              </p>
+            </div>
+            <div className="grid gap-6 lg:grid-cols-3">
+              <div className="space-y-3 rounded-lg border border-border p-4">
+                <span className="inline-flex h-5 items-center rounded-full bg-foreground px-2 text-[11px] font-medium tracking-wider text-background">
+                  Icons
+                </span>
+                <p className="text-sm text-muted-foreground">
+                  Swap any icon via the icons prop — bold now shows a heart.
+                </p>
+                <div className="-mx-4 -mb-4 border-t border-border">
+                  <IconsPreview />
+                </div>
+              </div>
+              <ThemeCard className="space-y-3 rounded-lg border border-border p-4">
+                <span className="inline-flex h-5 items-center rounded-full bg-primary px-2 text-[11px] font-medium tracking-wider text-primary-foreground">
+                  Themes
+                </span>
+                <p className="text-sm text-muted-foreground">
+                  Override CSS variables for a completely different look.
+                </p>
+                <div className="-mx-4 -mb-4 border-t border-border">
+                  <ThemePreview />
+                </div>
+              </ThemeCard>
+              <div className="space-y-3 rounded-lg border border-border p-4">
+                <span className="inline-flex h-5 items-center rounded-full bg-foreground px-2 text-[11px] font-medium tracking-wider text-background">
+                  Controls
+                </span>
+                <p className="text-sm text-muted-foreground">
+                  Add custom toolbar buttons using RichTextEditor.Control.
+                </p>
+                <div className="-mx-4 -mb-4 border-t border-border">
+                  <ControlsPreview />
+                </div>
+              </div>
+            </div>
+            <div>
+              <Link href="/docs/customization">
+                <Button variant="link" className="h-auto px-0">
+                  Explore customization &rarr;
+                </Button>
+              </Link>
+            </div>
+          </div>
         </section>
       </main>
 
