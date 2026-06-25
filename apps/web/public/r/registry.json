@@ -22,7 +22,6 @@
         "@tiptap/extension-placeholder@>=2.11.5 <4",
         "@base-ui/react@^1.0.0",
         "lowlight@^3.3.0",
-        "lucide-react@^0.500.0",
         "class-variance-authority@^0.7.1",
         "clsx@^2.1.1",
         "tailwind-merge@^3.0.0"
@@ -54,6 +53,10 @@
         },
         {
           "path": "rte-editor/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "rte-editor/icons.tsx",
           "type": "registry:component"
         },
         {
@@ -134,7 +137,6 @@
         "@base-ui/react@^1.0.0",
         "@floating-ui/dom@^1.6.0",
         "lowlight@^3.3.0",
-        "lucide-react@^0.500.0",
         "class-variance-authority@^0.7.1",
         "clsx@^2.1.1",
         "tailwind-merge@^3.0.0"

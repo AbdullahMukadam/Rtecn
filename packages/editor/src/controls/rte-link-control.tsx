@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
 import { useEditorState } from "@tiptap/react";
-import { Link } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -13,7 +12,7 @@ import { Toggle } from "../ui/toggle";
 import { useRichTextEditorContext } from "../rte-context";
 
 export function LinkControl() {
-  const { editor, labels } = useRichTextEditorContext();
+  const { editor, labels, icons } = useRichTextEditorContext();
   const [url, setUrl] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -76,7 +75,7 @@ export function LinkControl() {
           title={labels.linkControlLabel}
           className="p-0"
         >
-          <Link className="h-3 w-4" />
+          {icons.linkControlIcon}
         </Toggle>
       </PopoverTrigger>
       <PopoverContent className="w-72 p-3">

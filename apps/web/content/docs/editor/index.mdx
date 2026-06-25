@@ -13,11 +13,11 @@ Description: Tiptap-based rich text editor with a compound component API and 20+
 ## Installation
 
 ```bash
-pnpm add @rtecn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link
+pnpm add @rtecn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-placeholder
 ```
 
 ```bash
-npm install @rtecn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link
+npm install @rtecn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-placeholder
 ```
 
 After installation, import the editor styles at the root of your application:
@@ -132,6 +132,7 @@ The root wrapper that provides the editor context to all children.
 | `children` | `ReactNode` | — | Toolbar, content, controls |
 | `className` | `string` | — | Additional CSS classes (merged via `tailwind-merge`) |
 | `labels` | `Partial<RichTextEditorLabels>` | `DEFAULT_LABELS` | Override default labels for accessibility and UI text |
+| `icons` | `Partial<RichTextEditorIcons>` | `DEFAULT_ICONS` | Override default toolbar icons |
 
 ## RichTextEditor.Toolbar
 
@@ -197,7 +198,9 @@ function InsertStarControl() {
       onClick={() => editor?.chain().focus().insertContent("⭐").run()}
       aria-label="Insert star emoji"
     >
-      <Star size={16} />
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="rte-editor-icon">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+      </svg>
     </RichTextEditor.Control>
   );
 }
@@ -238,7 +241,12 @@ function YellowHighlightControl() {
       }
       aria-label="Yellow highlight"
     >
-      <Highlighter size={16} />
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="rte-editor-icon">
+        <path d="m12 3-1.5 1.5" />
+        <path d="M12 21l1.5-1.5" />
+        <path d="M3 12l1.5-1.5" />
+        <path d="M21 12l-1.5 1.5" />
+      </svg>
     </RichTextEditor.Control>
   );
 }
@@ -264,7 +272,10 @@ function InsertExampleLink() {
       }
       aria-label="Insert example link"
     >
-      <Link2 size={16} />
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="rte-editor-icon">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+      </svg>
     </RichTextEditor.Control>
   );
 }
@@ -549,6 +560,76 @@ import { DEFAULT_LABELS } from "@rtecn/editor";
   linkEditorSave: "Save",
 }
 ```
+
+## Icons
+
+Override any toolbar icon with the `icons` prop. Icons are rendered inside control buttons and use the `.rte-editor-icon` class for sizing.
+
+```tsx
+import { RichTextEditor, DEFAULT_ICONS } from "@rtecn/editor";
+
+<RichTextEditor
+  editor={editor}
+  icons={{
+    boldControlIcon: <YourBoldIcon />,
+    italicControlIcon: <YourItalicIcon />,
+  }}
+>
+  {/* ... */}
+</RichTextEditor>
+```
+
+### All available icons
+
+```tsx
+interface RichTextEditorIcons {
+  boldControlIcon: React.ReactNode;
+  italicControlIcon: React.ReactNode;
+  underlineControlIcon: React.ReactNode;
+  strikeControlIcon: React.ReactNode;
+  clearFormattingControlIcon: React.ReactNode;
+  codeControlIcon: React.ReactNode;
+  codeBlockControlIcon: React.ReactNode;
+  h1ControlIcon: React.ReactNode;
+  h2ControlIcon: React.ReactNode;
+  h3ControlIcon: React.ReactNode;
+  h4ControlIcon: React.ReactNode;
+  h5ControlIcon: React.ReactNode;
+  h6ControlIcon: React.ReactNode;
+  bulletListControlIcon: React.ReactNode;
+  orderedListControlIcon: React.ReactNode;
+  blockquoteControlIcon: React.ReactNode;
+  hrControlIcon: React.ReactNode;
+  linkControlIcon: React.ReactNode;
+  unlinkControlIcon: React.ReactNode;
+  undoControlIcon: React.ReactNode;
+  redoControlIcon: React.ReactNode;
+  alignLeftControlIcon: React.ReactNode;
+  alignCenterControlIcon: React.ReactNode;
+  alignRightControlIcon: React.ReactNode;
+  alignJustifyControlIcon: React.ReactNode;
+  highlightControlIcon: React.ReactNode;
+  subscriptControlIcon: React.ReactNode;
+  superscriptControlIcon: React.ReactNode;
+}
+```
+
+### Styling custom icons
+
+Apply the `rte-editor-icon` class to your custom icons so they inherit the correct toolbar dimensions:
+
+```tsx
+<RichTextEditor.Control
+  onClick={() => editor?.chain().focus().insertContent("...").run()}
+  aria-label="Custom"
+>
+  <svg className="rte-editor-icon" /* ... */>
+    {/* paths */}
+  </svg>
+</RichTextEditor.Control>
+```
+
+The default icons are inline SVGs with `strokeWidth={2}`, `24×24` viewBox, and `rte-editor-icon` class. See the [Styling guide](/docs/styling#change-icon-size) for size overrides.
 
 ## Editor context
 

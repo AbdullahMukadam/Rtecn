@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { cn } from "./ui/utils";
 import { RichTextEditorContext } from './rte-context';
 import { DEFAULT_LABELS } from './labels';
+import { DEFAULT_ICONS } from './icons';
 import { Toolbar } from './rte-toolbar';
 import { ControlsGroup } from './rte-controls-group';
 import { Content } from './rte-content';
@@ -15,6 +16,7 @@ function RichTextEditorRoot({
   children,
   className,
   labels,
+  icons,
   variant = "default",
 }: RichTextEditorProps) {
   const mergedLabels = useMemo(
@@ -22,8 +24,13 @@ function RichTextEditorRoot({
     [labels]
   );
 
+  const mergedIcons = useMemo(
+    () => ({ ...DEFAULT_ICONS, ...icons }),
+    [icons]
+  );
+
   return (
-    <RichTextEditorContext.Provider value={{ editor, labels: mergedLabels, variant }}>
+    <RichTextEditorContext.Provider value={{ editor, labels: mergedLabels, icons: mergedIcons, variant }}>
       <div
         className={cn(
           'rte-root',

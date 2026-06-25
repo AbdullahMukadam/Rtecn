@@ -1,5 +1,6 @@
 import type { Editor } from '@tiptap/react';
 import type { RichTextEditorLabels } from './labels';
+import type { RichTextEditorIcons } from './icons';
 
 export type RichTextEditorVariant = "default" | "subtle" | "compact";
 
@@ -8,6 +9,7 @@ export interface RichTextEditorProps {
   children: React.ReactNode;
   className?: string;
   labels?: Partial<RichTextEditorLabels>;
+  icons?: Partial<RichTextEditorIcons>;
   variant?: RichTextEditorVariant;
 }
 

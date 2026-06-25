@@ -3,6 +3,6 @@
 @import "fumadocs-ui/css/preset.css";
 
 .rte-root .rte-editor-icon {
-  width: 18px !important;
-  height: 18px !important;
+  width: 18px;
+  height: 18px;
 }

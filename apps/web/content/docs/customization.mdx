@@ -103,7 +103,6 @@ Add your own buttons to the toolbar using `useRichTextEditorContext` and `RichTe
 
 ```tsx
 import { useRichTextEditorContext } from "@rtecn/editor";
-import { Star } from "lucide-react";
 
 function InsertStar() {
   const { editor } = useRichTextEditorContext();
@@ -112,7 +111,9 @@ function InsertStar() {
       onClick={() => editor?.chain().focus().insertContent("⭐ ").run()}
       title="Insert star emoji"
     >
-      <Star className="h-4 w-4" />
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="rte-editor-icon">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+      </svg>
     </RichTextEditor.Control>
   );
 }
@@ -159,7 +160,7 @@ Customize button tooltips and aria-labels via the `labels` prop. All 33 labels c
   editor={editor}
   labels={{
     boldControlLabel: "Bold (B)",
-    italicControlLabel: "Italic (I)",
+    italicControlLabel: "italic (I)",
     linkControlLabel: "🔗 Link",
     h1ControlLabel: "Title",
     bulletListControlLabel: "List",
@@ -168,6 +169,36 @@ Customize button tooltips and aria-labels via the `labels` prop. All 33 labels c
   ...
 </RichTextEditor>
 ```
+
+### Custom Icon Overrides
+
+Replace any built-in toolbar icon via the `icons` prop. All 27 icons accept a React node, so you can use inline SVGs, emoji, or any icon library.
+
+<EditorCustomIconsDemo />
+
+```tsx
+<RichTextEditor
+  editor={editor}
+  icons={{
+    boldControlIcon: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="rte-editor-icon"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" /><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" /></svg>,
+    italicControlIcon: <em className="not-italic text-base font-serif rte-editor-icon leading-none">I</em>,
+    linkControlIcon: "🔗",
+  }}
+>
+  ...
+</RichTextEditor>
+```
+
+The `rte-editor-icon` class controls icon sizing in the toolbar. Apply it to your custom icons so they inherit the correct dimensions:
+
+```css
+.rte-editor-icon {
+  width: 1rem;
+  height: 1rem;
+}
+```
+
+See the [Styling docs](/docs/styling#change-icon-size) for more on sizing.
 
 ## BlockEditor
 

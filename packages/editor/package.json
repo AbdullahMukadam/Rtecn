@@ -1,6 +1,6 @@
 {
   "name": "@rtecn/editor",
-  "version": "0.1.9",
+  "version": "0.2.1",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -34,7 +34,6 @@
     "@tiptap/starter-kit": ">=2.11.5 <4",
     "class-variance-authority": "^0.7.1",
     "lowlight": "^3.3.0",
-    "lucide-react": "^0.500.0",
     "react": "^18 || ^19",
     "react-dom": "^18 || ^19"
   },

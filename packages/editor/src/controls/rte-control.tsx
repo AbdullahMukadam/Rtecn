@@ -1,5 +1,6 @@
 import { useEditorState } from "@tiptap/react";
 import type { RichTextEditorLabels } from "../labels";
+import type { RichTextEditorIcons } from "../icons";
 import { useRichTextEditorContext } from "../rte-context";
 import type { RichTextEditorControlProps } from "../types";
 import React from "react";
@@ -8,7 +9,7 @@ import { cn } from "../ui/utils";
 
 interface CreateControlProps {
   label: keyof RichTextEditorLabels;
-  icon:  React.ReactNode;
+  iconKey: keyof RichTextEditorIcons;
   isActive?: { name: string; attributes?: Record<string, any> | string };
   isDisabled?: (editor: any) => boolean;
   operation: { name: string; attributes?: Record<string, any> | string };
@@ -45,13 +46,13 @@ export function RichTextEditorControl({
 
 export function createControl({
   label,
-  icon,
+  iconKey,
   isActive,
   isDisabled,
   operation,
 }: CreateControlProps) {
   function Control({ className }: { className?: string }) {
-    const { editor, labels } = useRichTextEditorContext();
+    const { editor, labels, icons } = useRichTextEditorContext();
     const ariaLabel = labels[label] as string;
 
     const editorState = useEditorState({
@@ -90,7 +91,7 @@ export function createControl({
             .run();
         }}
       >
-        {icon}
+        {icons[iconKey]}
       </RichTextEditorControl>
     );
   }

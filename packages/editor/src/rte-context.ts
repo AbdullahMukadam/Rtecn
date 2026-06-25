@@ -1,11 +1,13 @@
 import { Editor } from "@tiptap/react";
 import type { RichTextEditorLabels } from "./labels";
+import type { RichTextEditorIcons } from "./icons";
 import type { RichTextEditorVariant } from "./types";
 import { createContext, useContext } from "react";
 
 interface RichTextEditorContextValue {
   editor: Editor | null;
   labels: RichTextEditorLabels;
+  icons: RichTextEditorIcons;
   variant: RichTextEditorVariant;
 }
 

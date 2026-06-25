@@ -283,9 +283,6 @@ importers:
       lowlight:
         specifier: ^3.3.0
         version: 3.3.0
-      lucide-react:
-        specifier: ^0.500.0
-        version: 0.500.0(react@19.2.7)
       react:
         specifier: ^18 || ^19
         version: 19.2.7
@@ -343,9 +340,6 @@ importers:
       lowlight:
         specifier: ^3.3.0
         version: 3.3.0
-      lucide-react:
-        specifier: ^0.500.0
-        version: 0.500.0(react@19.2.7)
       react:
         specifier: ^18 || ^19
         version: 19.2.7
@@ -3435,11 +3429,6 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
-
-  lucide-react@0.500.0:
-    resolution: {integrity: sha512-IyGvnYOSBKiF7rFI3p0tDw4ZI+TKnn1b5LPF2/q3NBmA7zYaDagevs1eMNyPRpKdFXxgma6rEu6+2ylJaaGnJA==}
-    peerDependencies:
-      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   lucide-react@0.546.0:
     resolution: {integrity: sha512-Z94u6fKT43lKeYHiVyvyR8fT7pwCzDu7RyMPpTvh054+xahSgj4HFQ+NmflvzdXsoAjYGdCguGaFKYuvq0ThCQ==}
@@ -7351,10 +7340,6 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
-
-  lucide-react@0.500.0(react@19.2.7):
-    dependencies:
-      react: 19.2.7
 
   lucide-react@0.546.0(react@19.2.7):
     dependencies:
