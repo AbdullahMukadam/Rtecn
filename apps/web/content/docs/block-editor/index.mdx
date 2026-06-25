@@ -71,7 +71,7 @@ const myItems: SlashCommandSuggestionItem[] = [
     description: "Insert an image.",
     keywords: ["image", "img", "picture", "photo"],
     command: ({ editor, range }) => {
-      const url = window.prompt("Enter image URL");
+      const url = window.prompt("Enter image URL"); // Replace with your own dialog component
       if (!url) return;
       editor.chain().focus().deleteRange(range).setImage({ src: url }).run();
     },
@@ -230,7 +230,7 @@ const myItems: SlashCommandSuggestionItem[] = [
     description: "Insert an image.",
     keywords: ["image", "img", "picture", "photo"],
     command: ({ editor, range }) => {
-      const url = window.prompt("Enter image URL");
+      const url = window.prompt("Enter image URL"); // Replace with your own dialog component
       if (!url) return;
       editor.chain().focus().deleteRange(range).setImage({ src: url }).run();
     },
@@ -278,7 +278,7 @@ The bubble menu automatically positions itself near the selection and is styled 
 ### Block actions
 
 Click the drag handle (grip icon) on the left side of any block to access a dropdown with:
-- **Duplicate** — Duplicate the current block
+- **Copy** — Copy the current block content to clipboard
 - **Delete** — Delete the current block
 
 ### Drag handle

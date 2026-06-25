@@ -152,12 +152,12 @@ function NodeSelector({ editor }: { editor: Editor }) {
               type="button"
               className="block-editor-bubble-dropdown-item"
               onClick={() => {
-                duplicateBlock(editor);
+                copyBlock(editor);
                 setOpen(false);
               }}
             >
-              <DuplicateIcon />
-              <span>Duplicate</span>
+              <CopyIcon />
+              <span>Copy</span>
             </button>
             <button
               type="button"
@@ -363,8 +363,25 @@ function TextAlignSelector({ editor }: { editor: Editor }) {
 function LinkSelector({ editor }: { editor: Editor }) {
   const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const isLink = editor.isActive("link");
-  const linkUrl = editor.getAttributes("link").href || "";
+  const [{ isLink, linkUrl }, setLinkState] = useState(() => ({
+    isLink: editor.isActive("link"),
+    linkUrl: editor.getAttributes("link").href || "",
+  }));
+
+  useEffect(() => {
+    const update = () => {
+      setLinkState({
+        isLink: editor.isActive("link"),
+        linkUrl: editor.getAttributes("link").href || "",
+      });
+    };
+    editor.on("selectionUpdate", update);
+    editor.on("transaction", update);
+    return () => {
+      editor.off("selectionUpdate", update);
+      editor.off("transaction", update);
+    };
+  }, [editor]);
 
   const handleSubmit = useCallback(
     (evt: React.FormEvent) => {
@@ -444,16 +461,14 @@ function LinkSelector({ editor }: { editor: Editor }) {
   );
 }
 
-function duplicateBlock(editor: Editor) {
+function copyBlock(editor: Editor) {
   const { from } = editor.state.selection;
   const $from = editor.state.doc.resolve(from);
   const start = $from.before($from.depth);
   const end = $from.after($from.depth);
   if (start < 0 || end <= start) return;
-  const node = editor.state.doc.slice(start, end);
-  const pos = editor.state.doc.resolve(end);
-  const insertPos = pos.after(pos.depth);
-  editor.chain().focus().insertContentAt(insertPos, node.content).run();
+  const text = editor.state.doc.textBetween(start, end, "\n", "\n");
+  navigator.clipboard.writeText(text).catch(() => {});
 }
 
 function deleteBlock(editor: Editor) {
@@ -710,7 +725,7 @@ function CheckIcon() {
     </svg>
   );
 }
-function DuplicateIcon() {
+function CopyIcon() {
   return (
     <svg
       width="14"

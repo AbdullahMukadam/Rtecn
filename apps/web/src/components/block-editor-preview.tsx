@@ -16,6 +16,7 @@ import Link from "@tiptap/extension-link";
 import CodeBlock from '@tiptap/extension-code-block'
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { common, createLowlight } from "lowlight";
+import { showImagePrompt } from "@/components/image-prompt";
 import {
   BlockEditor,
   SlashCommand,
@@ -62,12 +63,13 @@ const myItems: SlashCommandSuggestionItem[] = [
     description: "Insert an image.",
     keywords: ["image", "img", "picture", "photo"],
     command: ({ editor, range }) => {
-      const url = window.prompt("Enter image URL");
-      if (!url) return;
-      (editor.chain().focus() as any)
-        .deleteRange(range)
-        .setImage({ src: url })
-        .run();
+      showImagePrompt().then((url) => {
+        if (!url) return;
+        (editor.chain().focus() as any)
+          .deleteRange(range)
+          .setImage({ src: url })
+          .run();
+      });
     },
   },
   {

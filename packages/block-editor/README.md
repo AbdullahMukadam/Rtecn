@@ -7,7 +7,7 @@ A **Notion-style** block-type rich text editor built on [Tiptap](https://tiptap.
 - Block-based editing (Notion, Linear-style)
 - Slash command menu — type `/` to insert blocks
 - Bubble menu for inline formatting
-- Block-level actions (duplicate, delete, reorder via drag handle)
+- Block-level actions (copy, delete, reorder via drag handle)
 - Built-in image and table blocks
 - Fully typed with TypeScript
 - Extensible via Tiptap extensions

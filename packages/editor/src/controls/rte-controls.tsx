@@ -146,18 +146,21 @@ export const AlignLeftControl = createControl({
 export const AlignCenterControl = createControl({
   label: 'alignCenterControlLabel',
   iconKey: 'alignCenterControlIcon',
+  isActive: { attrs: { textAlign: 'center' } },
   operation: { name: 'setTextAlign', attributes: 'center' },
 });
 
 export const AlignRightControl = createControl({
   label: 'alignRightControlLabel',
   iconKey: 'alignRightControlIcon',
+  isActive: { attrs: { textAlign: 'right' } },
   operation: { name: 'setTextAlign', attributes: 'right' },
 });
 
 export const AlignJustifyControl = createControl({
   label: 'alignJustifyControlLabel',
   iconKey: 'alignJustifyControlIcon',
+  isActive: { attrs: { textAlign: 'justify' } },
   operation: { name: 'setTextAlign', attributes: 'justify' },
 });
 

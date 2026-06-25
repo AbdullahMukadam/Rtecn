@@ -7,10 +7,14 @@ import React from "react";
 import { Toggle } from "../ui/toggle";
 import { cn } from "../ui/utils";
 
+type IsActiveConfig =
+  | { name: string; attributes?: Record<string, any> | string }
+  | { attrs: Record<string, any> };
+
 interface CreateControlProps {
   label: keyof RichTextEditorLabels;
   iconKey: keyof RichTextEditorIcons;
-  isActive?: { name: string; attributes?: Record<string, any> | string };
+  isActive?: IsActiveConfig;
   isDisabled?: (editor: any) => boolean;
   operation: { name: string; attributes?: Record<string, any> | string };
 }
@@ -60,11 +64,14 @@ export function createControl({
       selector: (ctx) => {
         const safeEditor =
           ctx.editor && !ctx.editor.isDestroyed ? ctx.editor : null;
+        const checkIsActive = () => {
+          if (!safeEditor || !isActive) return false;
+          if ("attrs" in isActive) return safeEditor.isActive(isActive.attrs);
+          return safeEditor.isActive(isActive.name, isActive.attributes);
+        };
+
         return {
-          active:
-            safeEditor && isActive?.name
-              ? safeEditor.isActive(isActive.name, isActive.attributes)
-              : false,
+          active: checkIsActive(),
           disabled: safeEditor ? (isDisabled?.(safeEditor) ?? false) : true,
         };
       },

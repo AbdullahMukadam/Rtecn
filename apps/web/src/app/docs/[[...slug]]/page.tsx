@@ -27,9 +27,9 @@ export default async function Page(props: { params: Promise<PageParams> }) {
       <h1 className="text-[1.75em] font-semibold">{page.data.title}</h1>
       <p className="text-lg text-fd-muted-foreground mb-2">{page.data.description}</p>
       <div className="flex flex-row flex-wrap gap-2 items-center border-b pb-6 mt-0 pt-0">
-        <MarkdownCopyButton markdownUrl={`${page.url}.mdx`} />
+        <MarkdownCopyButton markdownUrl={`/api/mdx${page.url}`} />
         <ViewOptionsPopover
-          markdownUrl={`${page.url}.mdx`}
+          markdownUrl={`/api/mdx${page.url}`}
           githubUrl={`https://github.com/${owner}/${repo}/blob/dev/apps/docs/content/docs/${page.path}`}
         />
       </div>

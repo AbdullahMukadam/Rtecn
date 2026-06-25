@@ -40,7 +40,6 @@ const editorFiles = [
 const blockEditorFiles = [
   entry("rte-block-editor/index.ts", "registry:component", "block-editor", "index.ts"),
   entry("rte-block-editor/block-editor.tsx", "registry:component", "block-editor", "block-editor.tsx"),
-  entry("rte-block-editor/block-actions.tsx", "registry:component", "block-editor", "block-actions.tsx"),
   entry("rte-block-editor/bubble-menu.tsx", "registry:component", "block-editor", "bubble-menu.tsx"),
   entry("rte-block-editor/context.tsx", "registry:component", "block-editor", "context.tsx"),
   entry("rte-block-editor/labels.ts", "registry:component", "block-editor", "labels.ts"),

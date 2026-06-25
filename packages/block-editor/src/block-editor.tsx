@@ -3,7 +3,6 @@ import DragHandle from '@tiptap/extension-drag-handle-react';
 import { cn } from './lib/utils';
 import { BlockEditorProvider, useBlockEditorContext } from './context';
 import { BubbleMenu } from './bubble-menu';
-import { BlockActions } from './block-actions';
 import type { BlockEditorProps } from './types';
 
 function BlockEditorContent() {
@@ -23,7 +22,6 @@ function BlockEditorContent() {
           </svg>
         </DragHandle>
       )}
-      {editor && <BlockActions editor={editor} />}
       {editor && <BubbleMenu editor={editor} />}
       <EditorContent editor={editor} className="block-editor-content" />
     </div>

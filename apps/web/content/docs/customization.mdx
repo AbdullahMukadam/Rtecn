@@ -274,7 +274,7 @@ const customItems: SlashCommandSuggestionItem[] = [
     description: "Insert an image.",
     keywords: ["image", "img", "picture"],
     command: ({ editor, range }) => {
-      const url = window.prompt("Enter image URL");
+      const url = window.prompt("Enter image URL"); // Replace with your own dialog/modal
       if (!url) return;
       editor.chain().focus().deleteRange(range)
         .setImage({ src: url }).run();

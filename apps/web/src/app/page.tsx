@@ -109,6 +109,7 @@ import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import Link from "@tiptap/extension-link";
+import { showImagePrompt } from "@/components/image-prompt";
 import {
   BlockEditor,
   SlashCommand,
@@ -144,9 +145,10 @@ const myItems: SlashCommandSuggestionItem[] = [
     description: "Insert an image.",
     keywords: ["image", "img", "picture", "photo"],
     command: ({ editor, range }) => {
-      const url = window.prompt("Enter image URL");
-      if (!url) return;
-      editor.chain().focus().deleteRange(range).setImage({ src: url }).run();
+      showImagePrompt().then((url) => {
+        if (!url) return;
+        editor.chain().focus().deleteRange(range).setImage({ src: url }).run();
+      });
     },
   },
   {
