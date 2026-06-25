@@ -1,8 +1,6 @@
 import type { Editor } from '@tiptap/core';
 import type { ReactNode } from 'react';
 
-export type BlockEditorVariant = "default" | "minimal";
-
 export interface BlockEditorLabels {
   paragraphLabel?: string;
   headingLabel?: string;
@@ -19,11 +17,9 @@ export interface BlockEditorProps {
   children?: ReactNode;
   className?: string;
   labels?: Partial<BlockEditorLabels>;
-  variant?: BlockEditorVariant;
 }
 
 export interface BlockEditorContextValue {
   editor: Editor | null;
   labels: BlockEditorLabels;
-  variant: BlockEditorVariant;
 }

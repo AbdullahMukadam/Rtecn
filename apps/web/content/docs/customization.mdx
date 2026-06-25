@@ -11,6 +11,12 @@ description: See how to customize both editors through variants, CSS variables, 
 
 Switch between `default`, `subtle`, and `compact` variants using the `variant` prop.
 
+| Variant | Look | Best for |
+|---------|------|----------|
+| `default` | Bordered container with classic joined segmented toolbar buttons | Standard editor experiences where the toolbar should feel distinct from content |
+| `subtle` | No visible border — uses a soft shadow. Muted, rounded toolbar buttons. Elevated card feel. | Forms, settings pages, or anywhere a less prominent editor fits |
+| `compact` | Muted toolbar fused with content area. Minimal spacing, smaller icons. | Sidebars, modals, inline editing — constrained spaces |
+
 <EditorVariantsDemo />
 
 ```tsx
@@ -202,19 +208,11 @@ See the [Styling docs](/docs/styling#change-icon-size) for more on sizing.
 
 ## BlockEditor
 
-### Variants
+### Default
 
-The BlockEditor supports `default` and `minimal` variants via the `variant` prop.
+The BlockEditor ships as a single variant. Use `className` and CSS overrides for custom sizing, borders, and spacing.
 
 <BlockEditorVariantsDemo />
-
-```tsx
-{/* default */}
-<BlockEditor editor={editor} variant="default" />
-
-{/* minimal */}
-<BlockEditor editor={editor} variant="minimal" />
-```
 
 ### Scoped CSS Variables
 

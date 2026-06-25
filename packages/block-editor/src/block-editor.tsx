@@ -30,10 +30,10 @@ function BlockEditorContent() {
   );
 }
 
-function BlockEditorRoot({ editor, children, className, labels, variant = "default" }: BlockEditorProps) {
+function BlockEditorRoot({ editor, children, className, labels }: BlockEditorProps) {
   return (
-    <BlockEditorProvider editor={editor} labels={labels} variant={variant}>
-      <div className={cn(className)} data-variant={variant}>
+    <BlockEditorProvider editor={editor} labels={labels}>
+      <div className={cn("block-editor", className)}>
         {children ?? <BlockEditorContent />}
       </div>
     </BlockEditorProvider>

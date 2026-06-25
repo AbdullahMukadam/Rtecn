@@ -23,7 +23,6 @@ import {
   getSlashCommandSuggestion,
 } from "@rtecn/block-editor";
 import type {
-  BlockEditorVariant,
   SlashCommandSuggestionItem,
 } from "@rtecn/block-editor";
 import "@rtecn/block-editor/style.css";
@@ -87,11 +86,7 @@ const myItems: SlashCommandSuggestionItem[] = [
 
 const lowlight = createLowlight(common);
 
-export function BlockEditorPreview({
-  variant = "default",
-}: {
-  variant?: BlockEditorVariant;
-}) {
+export function BlockEditorPreview() {
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -195,7 +190,7 @@ export function BlockEditorPreview({
 
   return (
     <div className=" rounded-md border border-border font-inter [&_.ProseMirror]:text-[15px]">
-      <BlockEditor editor={editor} variant={variant} className="px-2" />
+      <BlockEditor editor={editor} className="px-2" />
     </div>
   );
 }

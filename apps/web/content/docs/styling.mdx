@@ -430,24 +430,18 @@ For the block editor:
 
 ## Variant-specific overrides
 
-Both editors support `data-variant` attribute on the root element. Use it to target specific variants:
+The editor uses `data-variant` attribute on the root element. Use it to target specific variants:
 
 ```css
 /* Target subtle variant */
 .rte-root[data-variant="subtle"] {
-  border-color: transparent;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 /* Target compact variant */
 .rte-root[data-variant="compact"] .rte-controls-group > button {
-  min-width: 1.75rem;
-  height: 1.75rem;
-}
-
-/* Target minimal variant (block editor) */
-[data-variant="minimal"] .block-editor-content .ProseMirror {
-  background-color: var(--muted);
-  padding: 1.5rem;
+  min-width: 1.5rem;
+  height: 1.5rem;
 }
 ```
 

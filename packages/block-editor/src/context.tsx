@@ -1,6 +1,6 @@
 import { createContext, useContext, type ReactNode } from 'react';
 import type { Editor } from '@tiptap/core';
-import type { BlockEditorContextValue, BlockEditorLabels, BlockEditorVariant } from './types';
+import type { BlockEditorContextValue, BlockEditorLabels } from './types';
 import { DEFAULT_BLOCK_EDITOR_LABELS } from './labels';
 
 const BlockEditorContext = createContext<BlockEditorContextValue | null>(null);
@@ -15,14 +15,12 @@ export interface BlockEditorProviderProps {
   editor: Editor | null;
   children: ReactNode;
   labels?: Partial<BlockEditorLabels>;
-  variant?: BlockEditorVariant;
 }
 
 export function BlockEditorProvider({
   editor,
   children,
   labels,
-  variant = "default",
 }: BlockEditorProviderProps) {
   const mergedLabels = { ...DEFAULT_BLOCK_EDITOR_LABELS, ...labels };
 
@@ -31,7 +29,6 @@ export function BlockEditorProvider({
       value={{
         editor,
         labels: mergedLabels,
-        variant,
       }}
     >
       {children}

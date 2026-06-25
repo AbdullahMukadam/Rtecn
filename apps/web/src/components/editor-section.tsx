@@ -8,7 +8,6 @@ import { EditorPreview } from "@/components/editor-preview";
 import { BlockEditorPreview } from "@/components/block-editor-preview";
 import { EditorCodeBlock } from "@/components/editor-code-block";
 import type { RichTextEditorVariant } from "@rtecn/editor";
-import type { BlockEditorVariant } from "@rtecn/block-editor";
 
 type CodeFile = {
   language: string;
@@ -16,50 +15,24 @@ type CodeFile = {
   code: string;
 };
 
-type EditorSectionProps =
-  | {
-      type: "editor";
-      title: string;
-      badge: string;
-      badgeClass?: string;
-      description: string;
-      codeData: CodeFile[];
-      docsHref: string;
-    }
-  | {
-      type: "block-editor";
-      title: string;
-      badge: string;
-      badgeClass?: string;
-      description: string;
-      codeData: CodeFile[];
-      docsHref: string;
-    };
+type EditorSectionProps = {
+  type: "editor" | "block-editor";
+  title: string;
+  badge: string;
+  badgeClass?: string;
+  description: string;
+  codeData: CodeFile[];
+  docsHref: string;
+};
 
-const EDITOR_VARIANTS: { label: string; value: RichTextEditorVariant }[] = [
+const VARIANTS: { label: string; value: RichTextEditorVariant }[] = [
   { label: "Default", value: "default" },
   { label: "Subtle", value: "subtle" },
   { label: "Compact", value: "compact" },
 ];
 
-const BLOCK_EDITOR_VARIANTS: { label: string; value: BlockEditorVariant }[] = [
-  { label: "Default", value: "default" },
-  { label: "Minimal", value: "minimal" },
-];
-
 export function EditorSection(props: EditorSectionProps) {
-  const [editorVariant, setEditorVariant] = useState<RichTextEditorVariant>("default");
-  const [blockEditorVariant, setBlockEditorVariant] = useState<BlockEditorVariant>("default");
-
-  const variants = props.type === "editor" ? EDITOR_VARIANTS : BLOCK_EDITOR_VARIANTS;
-  const currentVariant = props.type === "editor" ? editorVariant : blockEditorVariant;
-  const setVariant = (v: string) => {
-    if (props.type === "editor") {
-      setEditorVariant(v as RichTextEditorVariant);
-    } else {
-      setBlockEditorVariant(v as BlockEditorVariant);
-    }
-  };
+  const [variant, setVariant] = useState<RichTextEditorVariant>("default");
 
   return (
     <div>
@@ -71,18 +44,20 @@ export function EditorSection(props: EditorSectionProps) {
       </div>
       <p className="mb-4 text-base text-muted-foreground">{props.description}</p>
 
-      <div className="mb-3 flex gap-1">
-        {variants.map((v) => (
-          <Button
-            key={v.value}
-            variant={currentVariant === v.value ? "default" : "outline"}
-            size="sm"
-            onClick={() => setVariant(v.value)}
-          >
-            {v.label}
-          </Button>
-        ))}
-      </div>
+      {props.type === "editor" && (
+        <div className="mb-3 flex gap-1">
+          {VARIANTS.map((v) => (
+            <Button
+              key={v.value}
+              variant={variant === v.value ? "default" : "outline"}
+              size="sm"
+              onClick={() => setVariant(v.value)}
+            >
+              {v.label}
+            </Button>
+          ))}
+        </div>
+      )}
 
       <Tabs defaultValue="preview">
         <TabsList>
@@ -91,9 +66,9 @@ export function EditorSection(props: EditorSectionProps) {
         </TabsList>
         <TabsContent value="preview" className="pt-4">
           {props.type === "editor" ? (
-            <EditorPreview variant={editorVariant} />
+            <EditorPreview variant={variant} />
           ) : (
-            <BlockEditorPreview variant={blockEditorVariant} />
+            <BlockEditorPreview />
           )}
         </TabsContent>
         <TabsContent value="code" className="pt-4">

@@ -82,23 +82,10 @@ const extensions = [
 ];
 
 export function BlockEditorVariantsDemo() {
-  const a = useEditor({ immediatelyRender: false, shouldRerenderOnTransaction: false, extensions, content: BLOCK_CONTENT });
-  const b = useEditor({ immediatelyRender: false, shouldRerenderOnTransaction: false, extensions, content: BLOCK_CONTENT });
-
+  const editor = useEditor({ immediatelyRender: false, shouldRerenderOnTransaction: false, extensions, content: BLOCK_CONTENT });
   return (
-    <div className="space-y-6">
-      <div>
-        <p className="text-sm font-medium text-muted-foreground mb-2">default</p>
-        <div className="overflow-hidden rounded-md border border-border">
-          <BlockEditor editor={a} variant="default" />
-        </div>
-      </div>
-      <div>
-        <p className="text-sm font-medium text-muted-foreground mb-2">minimal</p>
-        <div className="overflow-hidden rounded-md border border-border">
-          <BlockEditor editor={b} variant="minimal" />
-        </div>
-      </div>
+    <div className="overflow-hidden rounded-md border border-border">
+      <BlockEditor editor={editor} />
     </div>
   );
 }
