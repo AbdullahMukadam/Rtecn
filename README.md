@@ -2,7 +2,7 @@
 
 Rich text editor components for [shadcn/ui](https://ui.shadcn.com/) projects, built on [Tiptap](https://tiptap.dev/).
 
-Two editor variants are available via the [shadcn registry](https://ui.shadcn.com/docs/registry):
+Two editor variants are available, installable via the [shadcn registry](https://ui.shadcn.com/docs/registry) (recommended) or npm/pnpm:
 
 | Package | Description |
 |---------|-------------|
@@ -10,6 +10,8 @@ Two editor variants are available via the [shadcn registry](https://ui.shadcn.co
 | [`@rtecn/block-editor`](https://rtecn.space/docs/block-editor) | Notion-style block editor with slash commands, drag handles, and bubble menu |
 
 ## Quick start
+
+**Install via the shadcn registry (recommended)** — this copies the editor source directly into your project so you can customize it freely.
 
 Add the rtecn registry to your `components.json`:
 
@@ -22,10 +24,13 @@ Add the rtecn registry to your `components.json`:
 }
 ```
 
-Install an editor:
+Then install whichever editor you want (pick one):
 
 ```bash
 npx shadcn@latest add @rtecn/editor
+```
+
+```bash
 npx shadcn@latest add @rtecn/block-editor
 ```
 
@@ -33,7 +38,7 @@ Then install the Tiptap peer dependencies and import the components. See the [re
 
 ## npm
 
-Both packages are also available on npm:
+Both packages are also available on npm, if you'd rather depend on a published, versioned package than vendor the source into your project. Pick one:
 
 ```bash
 npm install @rtecn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link
@@ -42,6 +47,18 @@ npm install @rtecn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/e
 ```bash
 npm install @rtecn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react
 ```
+
+Or with pnpm:
+
+```bash
+pnpm add @rtecn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link
+```
+
+```bash
+pnpm add @rtecn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react
+```
+
+See [npm vs registry](https://rtecn.space/docs/registry#npm-vs-registry) for the full tradeoffs.
 
 ## Documentation
 
