@@ -151,10 +151,6 @@
           "type": "registry:component"
         },
         {
-          "path": "rte-block-editor/block-actions.tsx",
-          "type": "registry:component"
-        },
-        {
           "path": "rte-block-editor/bubble-menu.tsx",
           "type": "registry:component"
         },

@@ -5,7 +5,9 @@ description: Install rtecn packages via the shadcn registry.
 
 # shadcn Registry
 
-Rtecn packages are available as a [shadcn registry](https://ui.shadcn.com/docs/registry), allowing you to install the source code directly into your project using the shadcn CLI.
+Rtecn packages are available as a [shadcn registry](https://ui.shadcn.com/docs/registry), allowing you to install the source code directly into your project using the shadcn CLI. **This is the recommended way to install rtecn packages** — it copies the editor source straight into your project so you have full control over styling and behavior, rather than depending on a published `node_modules` package.
+
+If you'd rather install from npm instead, see [npm vs registry](#npm-vs-registry) below for the tradeoffs.
 
 ## Setup
 
@@ -22,9 +24,9 @@ Add the rtecn registry to your `components.json`:
 
 ## Available packages
 
-| Package | Command |
-|---------|---------|
-| [@rtecn/editor](./editor) | `npx shadcn@latest add @rtecn/editor` |
+| Package                               | Command                                     |
+| ------------------------------------- | ------------------------------------------- |
+| [@rtecn/editor](./editor)             | `npx shadcn@latest add @rtecn/editor`       |
 | [@rtecn/block-editor](./block-editor) | `npx shadcn@latest add @rtecn/block-editor` |
 
 ## Usage
@@ -51,10 +53,14 @@ import "@/components/rte-block-editor/style.css";
 
 ### 2. Install peer dependencies
 
-The `@tiptap/*` packages are peer dependencies — install the ones you need:
+The `@tiptap/*` packages are peer dependencies. The shadcn CLI will prompt you to install any it detects as missing, but you can also add them yourself:
 
 ```bash
 npm install @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-underline
+```
+
+```bash
+pnpm add @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-underline
 ```
 
 See the [Editor](./editor) or [Block Editor](./block-editor) docs for the full list of extensions.
@@ -146,12 +152,15 @@ When you run `shadcn add @rtecn/editor`, the CLI:
 
 ## npm vs registry
 
-| | npm | Registry |
-|---|---|---|
-| Install location | `node_modules` | Your project source |
-| Customizable | No (published dist) | Yes (edit the source) |
-| Versioning | Semver via npm | Latest from source |
-| Use case | Quick setup | Full control |
+|                          | npm                                 | Registry (recommended)                 |
+| ------------------------ | ----------------------------------- | -------------------------------------- |
+| Install location         | `node_modules`                      | Your project source                    |
+| Customizable             | No (published dist)                 | Yes (edit the source)                  |
+| Versioning               | Semver via npm                      | Latest from source                     |
+| Peer dependency handling | Manual install                      | CLI prompts for missing ones           |
+| Use case                 | Quick setup, no source edits needed | Full control over styling and behavior |
+
+Use the registry unless you have a specific reason to prefer a versioned npm dependency (for example, pinning to an exact release in a monorepo with strict dependency management).
 
 ## Source
 

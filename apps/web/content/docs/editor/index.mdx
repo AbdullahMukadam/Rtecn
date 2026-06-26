@@ -12,6 +12,16 @@ Description: Tiptap-based rich text editor with a compound component API and 20+
 
 ## Installation
 
+**Install via the shadcn registry (recommended):**
+
+```bash
+npx shadcn@latest add @rtecn/editor
+```
+
+This copies the component source directly into your project, so you can customize it freely.
+
+**Or install via npm/pnpm:**
+
 ```bash
 pnpm add @rtecn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-placeholder
 ```
@@ -29,6 +39,14 @@ import "@rtecn/ui/globals.css";
 // Editor styles
 import "@rtecn/editor/style.css";
 ```
+
+<Callout type="warning">
+  If you installed via the shadcn registry, the package is copied into your project, so import from your local components path instead of `@rtecn/editor` throughout this page:
+  ```tsx
+  import { RichTextEditor, Link } from "@/components/rte-editor";
+  import "@/components/rte-editor/style.css";
+  ```
+</Callout>
 
 ## Tiptap editor
 
@@ -126,14 +144,14 @@ The root wrapper that provides the editor context to all children.
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `editor` | `Editor \| null` | — | The Tiptap editor instance |
-| `children` | `ReactNode` | — | Toolbar, content, controls |
-| `className` | `string` | — | Additional CSS classes (merged via `tailwind-merge`) |
-| `variant` | `"default" \| "subtle" \| "compact"` | `"default"` | Visual variant |
-| `labels` | `Partial<RichTextEditorLabels>` | `DEFAULT_LABELS` | Override default labels for accessibility and UI text |
-| `icons` | `Partial<RichTextEditorIcons>` | `DEFAULT_ICONS` | Override default toolbar icons |
+| Prop        | Type                                 | Default          | Description                                           |
+| ----------- | ------------------------------------ | ---------------- | ----------------------------------------------------- |
+| `editor`    | `Editor \| null`                     | —                | The Tiptap editor instance                            |
+| `children`  | `ReactNode`                          | —                | Toolbar, content, controls                            |
+| `className` | `string`                             | —                | Additional CSS classes (merged via `tailwind-merge`)  |
+| `variant`   | `"default" \| "subtle" \| "compact"` | `"default"`      | Visual variant                                        |
+| `labels`    | `Partial<RichTextEditorLabels>`      | `DEFAULT_LABELS` | Override default labels for accessibility and UI text |
+| `icons`     | `Partial<RichTextEditorIcons>`       | `DEFAULT_ICONS`  | Override default toolbar icons                        |
 
 ## RichTextEditor.Toolbar
 
@@ -141,11 +159,11 @@ The toolbar that holds control groups. Supports sticky positioning.
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `sticky` | `boolean` | `false` | Makes toolbar stick to top on scroll |
-| `stickyOffset` | `number \| string` | `0` | Offset from top when sticky (e.g. `60` or `"var(--header-height)"`) |
-| `className` | `string` | — | Additional CSS classes |
+| Prop           | Type               | Default | Description                                                         |
+| -------------- | ------------------ | ------- | ------------------------------------------------------------------- |
+| `sticky`       | `boolean`          | `false` | Makes toolbar stick to top on scroll                                |
+| `stickyOffset` | `number \| string` | `0`     | Offset from top when sticky (e.g. `60` or `"var(--header-height)"`) |
+| `className`    | `string`           | —       | Additional CSS classes                                              |
 
 ```tsx
 <RichTextEditor.Toolbar sticky stickyOffset={60}>
@@ -178,11 +196,11 @@ A generic control button for custom controls. Use built-in controls when possibl
 
 ### Props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `active` | `boolean` | Whether the control is in active state |
-| `interactive` | `boolean` | Whether the control is interactive (default `true`) |
-| Plus all standard button HTML attributes | | |
+| Prop                                     | Type      | Description                                         |
+| ---------------------------------------- | --------- | --------------------------------------------------- |
+| `active`                                 | `boolean` | Whether the control is in active state              |
+| `interactive`                            | `boolean` | Whether the control is interactive (default `true`) |
+| Plus all standard button HTML attributes |           |                                                     |
 
 ### Basic custom control
 
@@ -199,7 +217,14 @@ function InsertStarControl() {
       onClick={() => editor?.chain().focus().insertContent("⭐").run()}
       aria-label="Insert star emoji"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="rte-editor-icon">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        className="rte-editor-icon"
+      >
         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
       </svg>
     </RichTextEditor.Control>
@@ -234,15 +259,18 @@ function YellowHighlightControl() {
     <RichTextEditor.Control
       active={isActive}
       onClick={() =>
-        editor
-          ?.chain()
-          .focus()
-          .toggleHighlight({ color: "#fef08a" })
-          .run()
+        editor?.chain().focus().toggleHighlight({ color: "#fef08a" }).run()
       }
       aria-label="Yellow highlight"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="rte-editor-icon">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        className="rte-editor-icon"
+      >
         <path d="m12 3-1.5 1.5" />
         <path d="M12 21l1.5-1.5" />
         <path d="M3 12l1.5-1.5" />
@@ -273,7 +301,14 @@ function InsertExampleLink() {
       }
       aria-label="Insert example link"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="rte-editor-icon">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        className="rte-editor-icon"
+      >
         <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
         <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
       </svg>
@@ -284,25 +319,25 @@ function InsertExampleLink() {
 
 ## Controls and extensions
 
-Some controls require additional [Tiptap extensions](https://tiptap.dev/extensions) to be installed and configured.
+Some controls require additional [Tiptap extensions](https://tiptap.dev/extensions) to be installed and configured. If you installed via the shadcn registry, the CLI will prompt you to add any missing peer dependencies automatically; with npm/pnpm you'll need to add them yourself as shown below.
 
 ### Included with `@tiptap/starter-kit` (no extra installation needed)
 
-| Control | Tiptap Extension |
-|---------|-----------------|
-| `RichTextEditor.Bold` | `@tiptap/starter-kit` |
-| `RichTextEditor.Italic` | `@tiptap/starter-kit` |
-| `RichTextEditor.Strikethrough` | `@tiptap/starter-kit` |
-| `RichTextEditor.ClearFormatting` | `@tiptap/starter-kit` |
-| `RichTextEditor.Code` | `@tiptap/starter-kit` |
-| `RichTextEditor.CodeBlock` | `@tiptap/starter-kit` |
+| Control                                 | Tiptap Extension      |
+| --------------------------------------- | --------------------- |
+| `RichTextEditor.Bold`                   | `@tiptap/starter-kit` |
+| `RichTextEditor.Italic`                 | `@tiptap/starter-kit` |
+| `RichTextEditor.Strikethrough`          | `@tiptap/starter-kit` |
+| `RichTextEditor.ClearFormatting`        | `@tiptap/starter-kit` |
+| `RichTextEditor.Code`                   | `@tiptap/starter-kit` |
+| `RichTextEditor.CodeBlock`              | `@tiptap/starter-kit` |
 | `RichTextEditor.H1`–`RichTextEditor.H6` | `@tiptap/starter-kit` |
-| `RichTextEditor.BulletList` | `@tiptap/starter-kit` |
-| `RichTextEditor.OrderedList` | `@tiptap/starter-kit` |
-| `RichTextEditor.Blockquote` | `@tiptap/starter-kit` |
-| `RichTextEditor.Hr` | `@tiptap/starter-kit` |
-| `RichTextEditor.Undo` | `@tiptap/starter-kit` |
-| `RichTextEditor.Redo` | `@tiptap/starter-kit` |
+| `RichTextEditor.BulletList`             | `@tiptap/starter-kit` |
+| `RichTextEditor.OrderedList`            | `@tiptap/starter-kit` |
+| `RichTextEditor.Blockquote`             | `@tiptap/starter-kit` |
+| `RichTextEditor.Hr`                     | `@tiptap/starter-kit` |
+| `RichTextEditor.Undo`                   | `@tiptap/starter-kit` |
+| `RichTextEditor.Redo`                   | `@tiptap/starter-kit` |
 
 ### Controls requiring `@tiptap/extension-underline`
 
@@ -310,8 +345,8 @@ Some controls require additional [Tiptap extensions](https://tiptap.dev/extensio
 pnpm add @tiptap/extension-underline
 ```
 
-| Control |
-|---------|
+| Control                    |
+| -------------------------- |
 | `RichTextEditor.Underline` |
 
 ### Controls requiring `@tiptap/extension-text-align`
@@ -324,17 +359,15 @@ pnpm add @tiptap/extension-text-align
 import TextAlign from "@tiptap/extension-text-align";
 
 const editor = useEditor({
-  extensions: [
-    TextAlign.configure({ types: ["heading", "paragraph"] }),
-  ],
+  extensions: [TextAlign.configure({ types: ["heading", "paragraph"] })],
 });
 ```
 
-| Control |
-|---------|
-| `RichTextEditor.AlignLeft` |
-| `RichTextEditor.AlignCenter` |
-| `RichTextEditor.AlignRight` |
+| Control                       |
+| ----------------------------- |
+| `RichTextEditor.AlignLeft`    |
+| `RichTextEditor.AlignCenter`  |
+| `RichTextEditor.AlignRight`   |
 | `RichTextEditor.AlignJustify` |
 
 ### Controls requiring `@tiptap/extension-highlight`
@@ -343,8 +376,8 @@ const editor = useEditor({
 pnpm add @tiptap/extension-highlight
 ```
 
-| Control |
-|---------|
+| Control                    |
+| -------------------------- |
 | `RichTextEditor.Highlight` |
 
 ### Controls requiring `@tiptap/extension-subscript`
@@ -353,8 +386,8 @@ pnpm add @tiptap/extension-highlight
 pnpm add @tiptap/extension-subscript
 ```
 
-| Control |
-|---------|
+| Control                    |
+| -------------------------- |
 | `RichTextEditor.Subscript` |
 
 ### Controls requiring `@tiptap/extension-superscript`
@@ -363,8 +396,8 @@ pnpm add @tiptap/extension-subscript
 pnpm add @tiptap/extension-superscript
 ```
 
-| Control |
-|---------|
+| Control                      |
+| ---------------------------- |
 | `RichTextEditor.Superscript` |
 
 ## Link extension
@@ -385,7 +418,7 @@ const editor = useEditor({
 <RichTextEditor.ControlsGroup>
   <RichTextEditor.Link />
   <RichTextEditor.Unlink />
-</RichTextEditor.ControlsGroup>
+</RichTextEditor.ControlsGroup>;
 ```
 
 The link button opens a popover where users can enter or edit a URL. The `Mod-K` shortcut opens the link editor on selected text.
@@ -465,7 +498,7 @@ import { RichTextEditor, DEFAULT_LABELS } from "@rtecn/editor";
   }}
 >
   {/* ... */}
-</RichTextEditor>
+</RichTextEditor>;
 ```
 
 ### All available labels
@@ -577,7 +610,7 @@ import { RichTextEditor, DEFAULT_ICONS } from "@rtecn/editor";
   }}
 >
   {/* ... */}
-</RichTextEditor>
+</RichTextEditor>;
 ```
 
 ### All available icons
@@ -624,9 +657,7 @@ Apply the `rte-editor-icon` class to your custom icons so they inherit the corre
   onClick={() => editor?.chain().focus().insertContent("...").run()}
   aria-label="Custom"
 >
-  <svg className="rte-editor-icon" /* ... */>
-    {/* paths */}
-  </svg>
+  <svg className="rte-editor-icon" /* ... */>{/* paths */}</svg>
 </RichTextEditor.Control>
 ```
 

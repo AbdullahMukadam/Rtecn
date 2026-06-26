@@ -12,6 +12,16 @@ Description: Notion-style block-based editor with slash commands, drag handles, 
 
 ## Installation
 
+**Install via the shadcn registry (recommended):**
+
+```bash
+npx shadcn@latest add @rtecn/block-editor
+```
+
+This copies the component source directly into your project, so you can customize it freely.
+
+**Or install via npm/pnpm:**
+
 ```bash
 pnpm add @rtecn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react
 ```
@@ -30,6 +40,19 @@ import "@rtecn/ui/globals.css";
 import "@rtecn/block-editor/style.css";
 ```
 
+<Callout type="warning">
+  If you installed via the shadcn registry, the package is copied into your project, so import from your local components path instead of `@rtecn/block-editor` throughout this page:
+  ```tsx
+  import {
+    BlockEditor,
+    SlashCommand,
+    defaultSlashCommandItems,
+    getSlashCommandSuggestion,
+  } from "@/components/rte-block-editor";
+  import "@/components/rte-block-editor/style.css";
+  ```
+</Callout>
+
 ## Install Extensions
 
 For demo, we will use these extensions:
@@ -37,7 +60,6 @@ For demo, we will use these extensions:
 ```bash
 npm install @tiptap/extension-placeholder @tiptap/extension-underline @tiptap/extension-task-item @tiptap/extension-task-list @tiptap/extension-image @tiptap/extension-table @tiptap/extension-table-row @tiptap/extension-table-cell @tiptap/extension-table-header
 ```
-
 
 ## Usage
 
@@ -83,7 +105,8 @@ const myItems: SlashCommandSuggestionItem[] = [
     keywords: ["table", "grid"],
     command: ({ editor, range }) => {
       editor
-        .chain().focus()
+        .chain()
+        .focus()
         .deleteRange(range)
         .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
         .run();
@@ -123,25 +146,25 @@ The root wrapper that provides editor context. Renders the full editor UI by def
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `editor` | `Editor \| null` | — | The Tiptap editor instance |
-| `children` | `ReactNode` | — | Optional custom children to replace the default layout |
-| `className` | `string` | — | Additional CSS classes |
-| `labels` | `Partial<BlockEditorLabels>` | `DEFAULT_BLOCK_EDITOR_LABELS` | Override default slash command labels |
+| Prop        | Type                         | Default                       | Description                                            |
+| ----------- | ---------------------------- | ----------------------------- | ------------------------------------------------------ |
+| `editor`    | `Editor \| null`             | —                             | The Tiptap editor instance                             |
+| `children`  | `ReactNode`                  | —                             | Optional custom children to replace the default layout |
+| `className` | `string`                     | —                             | Additional CSS classes                                 |
+| `labels`    | `Partial<BlockEditorLabels>` | `DEFAULT_BLOCK_EDITOR_LABELS` | Override default slash command labels                  |
 
 ### Labels
 
-| Key | Default | Description |
-|-----|---------|-------------|
-| `paragraphLabel` | `"Text"` | Label for paragraph node |
-| `headingLabel` | `"Heading"` | Label for heading nodes |
-| `bulletListLabel` | `"Bullet list"` | Label for bullet list |
-| `orderedListLabel` | `"Numbered list"` | Label for ordered list |
-| `taskListLabel` | `"To-do list"` | Label for task list |
-| `blockquoteLabel` | `"Quote"` | Label for blockquote |
-| `codeBlockLabel` | `"Code"` | Label for code block |
-| `dividerLabel` | `"Divider"` | Label for divider |
+| Key                | Default           | Description              |
+| ------------------ | ----------------- | ------------------------ |
+| `paragraphLabel`   | `"Text"`          | Label for paragraph node |
+| `headingLabel`     | `"Heading"`       | Label for heading nodes  |
+| `bulletListLabel`  | `"Bullet list"`   | Label for bullet list    |
+| `orderedListLabel` | `"Numbered list"` | Label for ordered list   |
+| `taskListLabel`    | `"To-do list"`    | Label for task list      |
+| `blockquoteLabel`  | `"Quote"`         | Label for blockquote     |
+| `codeBlockLabel`   | `"Code"`          | Label for code block     |
+| `dividerLabel`     | `"Divider"`       | Label for divider        |
 
 ## BlockEditor.Content
 
@@ -172,16 +195,16 @@ Type `/` to open the slash command menu. The menu shows available block types. N
 
 **Available commands:**
 
-| Command | Description |
-|---------|-------------|
-| Text | Plain paragraph |
-| Heading 1/2/3 | Section headings |
-| Bullet List | Unordered list |
-| Numbered List | Ordered list |
-| Task List | Checklist with checkboxes |
-| Quote | Blockquote |
-| Code | Code block with syntax highlighting (requires lowlight) |
-| Divider | Horizontal rule |
+| Command       | Description                                             |
+| ------------- | ------------------------------------------------------- |
+| Text          | Plain paragraph                                         |
+| Heading 1/2/3 | Section headings                                        |
+| Bullet List   | Unordered list                                          |
+| Numbered List | Ordered list                                            |
+| Task List     | Checklist with checkboxes                               |
+| Quote         | Blockquote                                              |
+| Code          | Code block with syntax highlighting (requires lowlight) |
+| Divider       | Horizontal rule                                         |
 
 ### Custom slash command items
 
@@ -197,7 +220,7 @@ import type {
   OnCommandSelect,
 } from "@rtecn/block-editor";
 
-const myItems : SlashCommandSuggestionItem[] = [
+const myItems: SlashCommandSuggestionItem[] = [
   ...defaultSlashCommandItems,
   {
     id: "custom",
@@ -242,7 +265,8 @@ const myItems: SlashCommandSuggestionItem[] = [
     keywords: ["table", "grid"],
     command: ({ editor, range }) => {
       editor
-        .chain().focus()
+        .chain()
+        .focus()
         .deleteRange(range)
         .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
         .run();
@@ -268,6 +292,7 @@ const editor = useEditor({
 ### Bubble menu
 
 Select text to see the floating bubble menu with:
+
 - **Node type selector** — Switch between paragraph, headings, lists, etc.
 - **Inline formatting** — Bold, Italic, Underline, Strike, Code
 - **Link insertion/removal** — Add or remove links
@@ -278,6 +303,7 @@ The bubble menu automatically positions itself near the selection and is styled 
 ### Block actions
 
 Click the drag handle (grip icon) on the left side of any block to access a dropdown with:
+
 - **Copy** — Copy the current block content to clipboard
 - **Delete** — Delete the current block
 
@@ -287,17 +313,17 @@ Drag blocks to reorder them using the grip icon on the left. The drag handle use
 
 ## Extensions
 
-All `@tiptap/*` packages are **peer dependencies** — you must install them in your project. This ensures there is only one copy of Tiptap's types, avoiding "duplicate instance" TypeScript errors.
+All `@tiptap/*` packages are **peer dependencies** — you must install them in your project. This ensures there is only one copy of Tiptap's types, avoiding "duplicate instance" TypeScript errors. If you installed via the shadcn registry, the CLI will prompt you to add any missing peer dependencies automatically.
 
-| Extension | Purpose | Required |
-|-----------|---------|----------|
-| `@tiptap/starter-kit` | Core editor functionality | Yes |
-| `@tiptap/pm` | ProseMirror runtime | Yes |
-| `@tiptap/react` | React bindings | Yes |
-| `@tiptap/suggestion` | Slash command suggestion engine | Yes |
-| `@tiptap/extension-drag-handle-react` | Block drag handle UI | Yes |
+| Extension                               | Purpose                                   | Required |
+| --------------------------------------- | ----------------------------------------- | -------- |
+| `@tiptap/starter-kit`                   | Core editor functionality                 | Yes      |
+| `@tiptap/pm`                            | ProseMirror runtime                       | Yes      |
+| `@tiptap/react`                         | React bindings                            | Yes      |
+| `@tiptap/suggestion`                    | Slash command suggestion engine           | Yes      |
+| `@tiptap/extension-drag-handle-react`   | Block drag handle UI                      | Yes      |
 | `@tiptap/extension-code-block-lowlight` | Syntax highlighting (requires `lowlight`) | Optional |
-| `@tiptap/extension-placeholder` | Placeholder text | Optional |
+| `@tiptap/extension-placeholder`         | Placeholder text                          | Optional |
 
 Extensions for **Image**, **Table**, **Link**, and others are not included — add them as needed for your custom slash commands.
 

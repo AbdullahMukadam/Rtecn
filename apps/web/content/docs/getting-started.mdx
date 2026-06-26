@@ -15,31 +15,65 @@ description: Get started with rtecn packages in your project.
 
 Rtecn offers two editor packages. Pick the one that fits your use case:
 
-### Option 1: @rtecn/editor (Toolbar-style)
+- **[@rtecn/editor](#option-1-rtecneditor-toolbar-style)** — a classic toolbar-style rich text editor
+- **[@rtecn/block-editor](#option-2-rtecnblock-editor-blocks-style)** — a Notion-style block editor with slash commands
 
-```bash
-npm install @rtecn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-underline
+Both packages can be installed either via **npm** or via the **shadcn registry**:
+
+- **shadcn registry** (recommended) copies the component source directly into your project (under `components/`), so you own and can customize the code. This is the preferred method since it gives you full control over styling and behavior.
+- **npm** installs the package as a regular dependency from the npm registry. Use this if you'd rather not vendor the component source into your repo.
+
+## Setup
+
+Since the shadcn registry is the recommended install method, add the rtecn registry to your `components.json` first (skip this if you're installing via npm only):
+
+```json
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "registries": {
+    "@rtecn": "https://rtecn.space/r/{name}.json"
+  }
+}
 ```
 
-or
+### Option 1: @rtecn/editor (Toolbar-style)
+
+**Install via the shadcn registry (recommended):**
 
 ```bash
 npx shadcn@latest add @rtecn/editor
 ```
 
-```css
-@import "@rtecn/editor/style.css";
+**Or install via npm:**
+
+```bash
+npm install @rtecn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-underline
 ```
+
+Import the styles:
+
+```css
+import "@rtecn/editor/style.css";
+```
+
+<Callout type="warning">
+  If you installed via the shadcn registry, the package is copied into your project, so import from your local components path instead of `@rtecn/editor`:
+  ```tsx
+    import { RichTextEditor, Link } from '@/components/rte-editor';
+    import "@/components/rte-editor/style.css";
+  ```
+</Callout>
 
 ```tsx
 "use client";
 
-import { useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import TextAlign from '@tiptap/extension-text-align';
-import Placeholder from '@tiptap/extension-placeholder';
-import { RichTextEditor, Link } from '@rtecn/editor';
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
+import Placeholder from "@tiptap/extension-placeholder";
+import { RichTextEditor, Link } from "@rtecn/editor";
+import "@rtecn/editor/style.css";
 
 export function MyEditor() {
   const editor = useEditor({
@@ -52,7 +86,7 @@ export function MyEditor() {
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({ placeholder: "Start typing..." }),
     ],
-    content: '<p>Start typing...</p>',
+    content: "<p>Start typing...</p>",
   });
 
   return (
@@ -105,33 +139,51 @@ export function MyEditor() {
 
 ### Option 2: @rtecn/block-editor (Blocks-style)
 
-```bash
-npm install @rtecn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react @tiptap/extension-link @tiptap/extension-underline @tiptap/extension-placeholder
-```
-
-or
+**Install via the shadcn registry (recommended):**
 
 ```bash
 npx shadcn@latest add @rtecn/block-editor
 ```
 
-```css
-@import "@rtecn/block-editor/style.css";
+**Or install via npm:**
+
+```bash
+npm install @rtecn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react @tiptap/extension-link @tiptap/extension-underline @tiptap/extension-placeholder
 ```
+
+Import the styles:
+
+```css
+import "@rtecn/block-editor/style.css";
+```
+
+<Callout type="warning">
+  If you installed via the shadcn registry, the package is copied into your project, so import from your local components path instead of `@rtecn/block-editor`:
+  ```tsx
+  import {
+  BlockEditor,
+  SlashCommand,
+  defaultSlashCommandItems,
+  getSlashCommandSuggestion,
+  } from '@/components/rte-block-editor';
+  import "@/components/rte-block-editor/style.css";
+  ```
+</Callout>
 
 ```tsx
 "use client";
 
-import { useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import Placeholder from '@tiptap/extension-placeholder';
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import Placeholder from "@tiptap/extension-placeholder";
 import {
   BlockEditor,
   SlashCommand,
   defaultSlashCommandItems,
   getSlashCommandSuggestion,
-} from '@rtecn/block-editor';
+} from "@rtecn/block-editor";
+import "@rtecn/block-editor/style.css";
 
 export function MyEditor() {
   const editor = useEditor({
@@ -156,3 +208,5 @@ export function MyEditor() {
 ## Peer dependencies
 
 All `@tiptap/*` packages are **peer dependencies** — you must install them in your project. This ensures a single copy of Tiptap's types and avoids "duplicate instance" TypeScript errors.
+
+This applies regardless of install method: npm installs list them explicitly as shown above, and the shadcn registry installer will prompt you to add any peer dependencies it detects are missing.
