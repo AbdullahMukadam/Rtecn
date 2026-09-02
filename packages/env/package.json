@@ -4,8 +4,18 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./server": "./src/server.ts",
-    "./web": "./src/web.ts"
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js"
+    },
+    "./web": {
+      "types": "./dist/web.d.ts",
+      "import": "./dist/web.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.1",
@@ -16,6 +26,7 @@
   "devDependencies": {
     "@editorcn/config": "workspace:*",
     "@types/node": "^22.13.14",
+    "tsup": "^8.4.0",
     "typescript": "catalog:"
   }
 }

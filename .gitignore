@@ -10,6 +10,8 @@ build
 
 # Generated files
 apps/web/src/routeTree.gen.ts
+AGENTS.md
+CLAUDE.md
 
 # Environment variables
 .env
