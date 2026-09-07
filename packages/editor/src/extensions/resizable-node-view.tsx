@@ -3,6 +3,7 @@
 import { NodeViewWrapper } from "@tiptap/react";
 import type { NodeViewProps } from "@tiptap/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+
 import {
   AlignIcon,
   DeleteEmbedIcon,

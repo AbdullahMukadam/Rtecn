@@ -22,6 +22,60 @@ import { Input } from "../ui/input";
 
 const WIDGET_SCRIPT_URL = "https://platform.twitter.com/widgets.js";
 
+let twitterScriptPromise: Promise<void> | null = null;
+
+const loadTwitterScript = (): Promise<void> => {
+  if (typeof window === "undefined") {
+    return Promise.resolve();
+  }
+  if (window.twttr?.widgets) {
+    return Promise.resolve();
+  }
+  if (twitterScriptPromise) {
+    return twitterScriptPromise;
+  }
+
+  // eslint-disable-next-line promise/avoid-new
+  twitterScriptPromise = new Promise<void>((resolve) => {
+    let script = document.querySelector<HTMLScriptElement>(
+      `script[src="${WIDGET_SCRIPT_URL}"]`
+    );
+    if (!script) {
+      script = document.createElement("script");
+      script.src = WIDGET_SCRIPT_URL;
+      script.async = true;
+      document.body.append(script);
+    }
+
+    const checkReady = () => {
+      if (window.twttr?.widgets) {
+        resolve();
+      } else {
+        const interval = setInterval(() => {
+          if (window.twttr?.widgets) {
+            clearInterval(interval);
+            resolve();
+          }
+        }, 50);
+        setTimeout(() => {
+          clearInterval(interval);
+          resolve();
+        }, 4000);
+      }
+    };
+
+    if (window.twttr?.widgets) {
+      resolve();
+      return;
+    }
+
+    script.addEventListener("load", checkReady, { once: true });
+    script.addEventListener("error", () => resolve(), { once: true });
+  });
+
+  return twitterScriptPromise;
+};
+
 declare global {
   interface Window {
     twttr?: {
@@ -48,59 +102,83 @@ const TwitterNodeView = (props: NodeViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const { tweetId } = node.attrs;
-  const w = node.attrs.width as number | undefined;
-  const h = node.attrs.height as number | undefined;
-
-  const renderTweet = useCallback(async () => {
-    if (!containerRef.current || !tweetId) {
-      return;
-    }
-    containerRef.current.innerHTML = "";
-    setLoading(true);
-    const { twttr } = window;
-    if (twttr?.widgets && containerRef.current) {
-      try {
-        await twttr.widgets.createTweet(tweetId, containerRef.current);
-        setLoading(false);
-      } catch {
-        /* ignored */
-      }
-    }
-  }, [tweetId]);
+  const renderedTweetIdRef = useRef<string | null>(null);
+  const activeRenderIdRef = useRef(0);
 
   useEffect(() => {
     if (!containerRef.current || !tweetId) {
       return;
     }
 
-    const load = async () => {
-      if (window.twttr?.widgets && containerRef.current) {
-        containerRef.current.innerHTML = "";
-        setLoading(true);
-        try {
-          await window.twttr.widgets.createTweet(tweetId, containerRef.current);
+    // Skip re-rendering if this exact tweet is already rendered in the DOM
+    if (
+      renderedTweetIdRef.current === tweetId &&
+      containerRef.current.children.length > 0
+    ) {
+      setLoading(false);
+      return;
+    }
+
+    let isCancelled = false;
+    activeRenderIdRef.current += 1;
+    const renderId = activeRenderIdRef.current;
+    setLoading(true);
+
+    const render = async () => {
+      try {
+        await loadTwitterScript();
+        if (
+          isCancelled ||
+          renderId !== activeRenderIdRef.current ||
+          !containerRef.current
+        ) {
+          return;
+        }
+
+        const { twttr } = window;
+        if (twttr?.widgets && containerRef.current) {
+          containerRef.current.innerHTML = "";
+          const el = await twttr.widgets.createTweet(
+            tweetId,
+            containerRef.current
+          );
+
+          // If a newer render started or component unmounted while createTweet was pending
+          if (
+            isCancelled ||
+            renderId !== activeRenderIdRef.current ||
+            !containerRef.current
+          ) {
+            if (el && typeof (el as HTMLElement).remove === "function") {
+              (el as HTMLElement).remove();
+            } else if (containerRef.current) {
+              containerRef.current.innerHTML = "";
+            }
+            return;
+          }
+
+          // Safety guard: ensure only one tweet element remains in the container
+          while (containerRef.current.children.length > 1) {
+            containerRef.current.firstElementChild?.remove();
+          }
+
+          renderedTweetIdRef.current = tweetId;
+        }
+      } catch {
+        /* ignored */
+      } finally {
+        if (!isCancelled && renderId === activeRenderIdRef.current) {
           setLoading(false);
-        } catch {
-          /* ignored */
         }
-      } else {
-        let script = document.querySelector<HTMLScriptElement>(
-          `script[src="${WIDGET_SCRIPT_URL}"]`
-        );
-        if (!script) {
-          script = document.createElement("script");
-          script.src = WIDGET_SCRIPT_URL;
-          script.async = true;
-          document.body.append(script);
-        }
-        script.addEventListener("load", () => {
-          void renderTweet();
-        });
       }
     };
 
-    void load();
-  }, [tweetId, w, h, renderTweet]);
+    void render();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [tweetId]);
 
   return (
     <ResizableNodeView
