@@ -21,6 +21,92 @@ import {
 import { Input } from "../ui/input";
 
 const WIDGET_SCRIPT_URL = "https://platform.twitter.com/widgets.js";
+const SCRIPT_LOAD_TIMEOUT_MS = 8000;
+const READY_POLL_INTERVAL_MS = 50;
+
+let twitterScriptPromise: Promise<void> | null = null;
+
+const loadTwitterScript = (): Promise<void> => {
+  if (typeof window === "undefined") {
+    return Promise.resolve();
+  }
+  if (window.twttr?.widgets) {
+    return Promise.resolve();
+  }
+  if (twitterScriptPromise) {
+    return twitterScriptPromise;
+  }
+
+  // eslint-disable-next-line promise/avoid-new
+  twitterScriptPromise = new Promise<void>((resolve, reject) => {
+    let script = document.querySelector<HTMLScriptElement>(
+      `script[src="${WIDGET_SCRIPT_URL}"]`
+    );
+    const isNewScript = !script;
+    if (!script) {
+      script = document.createElement("script");
+      script.src = WIDGET_SCRIPT_URL;
+      script.async = true;
+      document.body.append(script);
+    }
+
+    let settled = false;
+    const timers: {
+      poll?: ReturnType<typeof setInterval>;
+      timeout?: ReturnType<typeof setTimeout>;
+    } = {};
+
+    const cleanup = () => {
+      clearInterval(timers.poll);
+      clearTimeout(timers.timeout);
+    };
+
+    const succeed = () => {
+      if (settled) {return;}
+      settled = true;
+      cleanup();
+      resolve();
+    };
+
+    const fail = () => {
+      if (settled) {return;}
+      settled = true;
+      cleanup();
+      twitterScriptPromise = null;
+      reject(new Error("Failed to load Twitter widgets script"));
+    };
+
+    if (window.twttr?.widgets) {
+      succeed();
+      return;
+    }
+
+    timers.poll = setInterval(() => {
+      if (window.twttr?.widgets) {
+        succeed();
+      }
+    }, READY_POLL_INTERVAL_MS);
+
+    timers.timeout = setTimeout(fail, SCRIPT_LOAD_TIMEOUT_MS);
+
+    if (isNewScript) {
+      script.addEventListener(
+        "load",
+        () => {
+          if (window.twttr?.widgets) {
+            succeed();
+          }
+          // If widgets isn't attached yet, the poll above will pick it up.
+        },
+        { once: true }
+      );
+    }
+
+    script.addEventListener("error", fail, { once: true });
+  });
+
+  return twitterScriptPromise;
+};
 
 declare global {
   interface Window {
@@ -47,55 +133,102 @@ const TwitterNodeView = (props: NodeViewProps) => {
   const { node } = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
   const { tweetId } = node.attrs;
-  const w = node.attrs.width as number | undefined;
-  const h = node.attrs.height as number | undefined;
+  const renderedTweetIdRef = useRef<string | null>(null);
+  const activeRenderIdRef = useRef(0);
 
-  const renderTweet = useCallback(async () => {
-    if (!containerRef.current || !tweetId) {
-      return;
-    }
-    containerRef.current.innerHTML = "";
-    setLoading(true);
-    const { twttr } = window;
-    if (twttr?.widgets && containerRef.current) {
-      try {
-        await twttr.widgets.createTweet(tweetId, containerRef.current);
-        setLoading(false);
-      } catch {
-        /* ignored */
-      }
-    }
-  }, [tweetId]);
+  const retryToken = useRef(0);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     if (!containerRef.current || !tweetId) {
       return;
     }
 
-    const load = async () => {
-      if (window.twttr?.widgets && containerRef.current) {
-        containerRef.current.innerHTML = "";
-        setLoading(true);
-        try {
-          await window.twttr.widgets.createTweet(tweetId, containerRef.current);
-          setLoading(false);
-        } catch {
-          /* ignored */
+    if (
+      renderedTweetIdRef.current === tweetId &&
+      containerRef.current.children.length > 0 &&
+      !failed
+    ) {
+      setLoading(false);
+      return;
+    }
+
+    let isCancelled = false;
+    activeRenderIdRef.current += 1;
+    const renderId = activeRenderIdRef.current;
+    setLoading(true);
+    setFailed(false);
+
+    const render = async () => {
+      try {
+        await loadTwitterScript();
+        if (
+          isCancelled ||
+          renderId !== activeRenderIdRef.current ||
+          !containerRef.current
+        ) {
+          return;
         }
-      } else {
-        const script = document.createElement("script");
-        script.src = WIDGET_SCRIPT_URL;
-        script.async = true;
-        script.addEventListener("load", () => {
-          void renderTweet();
-        });
-        document.body.append(script);
+
+        const { twttr } = window;
+        if (!twttr?.widgets) {
+          throw new Error("Twitter widgets script unavailable");
+        }
+
+        containerRef.current.innerHTML = "";
+        const el = await twttr.widgets.createTweet(
+          tweetId,
+          containerRef.current
+        );
+
+        if (
+          isCancelled ||
+          renderId !== activeRenderIdRef.current ||
+          !containerRef.current
+        ) {
+          if (el && typeof (el as HTMLElement).remove === "function") {
+            (el as HTMLElement).remove();
+          } else if (containerRef.current) {
+            containerRef.current.innerHTML = "";
+          }
+          return;
+        }
+
+        if (!el) {
+          throw new Error("Tweet could not be embedded");
+        }
+
+        // Safety guard: ensure only one tweet element remains in the container
+        while (containerRef.current.children.length > 1) {
+          containerRef.current.firstElementChild?.remove();
+        }
+
+        renderedTweetIdRef.current = tweetId;
+      } catch {
+        if (!isCancelled && renderId === activeRenderIdRef.current) {
+          setFailed(true);
+          renderedTweetIdRef.current = null;
+        }
+      } finally {
+        if (!isCancelled && renderId === activeRenderIdRef.current) {
+          setLoading(false);
+        }
       }
     };
 
-    void load();
-  }, [tweetId, w, h, renderTweet]);
+    void render();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [tweetId, retryCount, failed]);
+
+  const handleRetry = useCallback(() => {
+    retryToken.current += 1;
+    setRetryCount(retryToken.current);
+  }, []);
 
   return (
     <ResizableNodeView
@@ -105,6 +238,14 @@ const TwitterNodeView = (props: NodeViewProps) => {
       maxWidth={1200}
     >
       {loading && <div className="rte-embed-loading">Loading tweet...</div>}
+      {!loading && failed && (
+        <div className="rte-embed-error">
+          <p>Couldn&apos;t load this tweet.</p>
+          <button type="button" onClick={handleRetry}>
+            Retry
+          </button>
+        </div>
+      )}
       <div ref={containerRef} />
     </ResizableNodeView>
   );
@@ -204,6 +345,7 @@ export const TwitterEmbedControl = ({ className }: { className?: string }) => {
   const { editor } = useRichTextEditorContext();
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState("");
+  const [touched, setTouched] = useState(false);
 
   const { active } = useEditorState({
     editor: editor ?? null,
@@ -215,18 +357,34 @@ export const TwitterEmbedControl = ({ className }: { className?: string }) => {
     }),
   }) ?? { active: false };
 
+  const tweetId = url ? extractTweetId(url) : null;
+  const showError = touched && url.length > 0 && !tweetId;
+
+  const resetState = useCallback(() => {
+    setUrl("");
+    setTouched(false);
+  }, []);
+
   const handleInsert = useCallback(() => {
-    if (url && editor) {
-      const tweetId = extractTweetId(url);
-      if (tweetId) {
-        editor.chain().focus().setTwitterEmbed(tweetId).run();
-        setUrl("");
-      }
+    setTouched(true);
+    if (!tweetId || !editor) {
+      return false;
     }
-  }, [url, editor]);
+    editor.chain().focus().setTwitterEmbed(tweetId).run();
+    resetState();
+    return true;
+  }, [tweetId, editor, resetState]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        setOpen(next);
+        if (!next) {
+          resetState();
+        }
+      }}
+    >
       <DialogTrigger
         render={
           <RichTextEditorControl
@@ -253,24 +411,38 @@ export const TwitterEmbedControl = ({ className }: { className?: string }) => {
         </DialogHeader>
         <Input
           value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          onChange={(e) => {
+            setUrl(e.target.value);
+            if (touched) {setTouched(false);}
+          }}
+          onBlur={() => setTouched(true)}
           placeholder="https://x.com/user/status/..."
+          aria-invalid={showError}
           onKeyDown={(e) => {
-            if (e.key === "Enter" && url) {
-              handleInsert();
+            if (e.key === "Enter" && url && handleInsert()) {
               setOpen(false);
             }
           }}
         />
+        {showError && (
+          <p className="rte-input-error" role="alert">
+            That doesn&apos;t look like a valid tweet URL or ID.
+          </p>
+        )}
         <DialogFooter>
           <DialogClose>Cancel</DialogClose>
-          <DialogClose
+          <button
+            type="button"
             disabled={!url}
             className="rounded-md bg-primary px-3 py-1.5 text-sm text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
-            onClick={handleInsert}
+            onClick={() => {
+              if (handleInsert()) {
+                setOpen(false);
+              }
+            }}
           >
             Insert
-          </DialogClose>
+          </button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
