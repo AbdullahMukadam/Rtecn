@@ -62,14 +62,18 @@ const loadTwitterScript = (): Promise<void> => {
     };
 
     const succeed = () => {
-      if (settled) {return;}
+      if (settled) {
+        return;
+      }
       settled = true;
       cleanup();
       resolve();
     };
 
     const fail = () => {
-      if (settled) {return;}
+      if (settled) {
+        return;
+      }
       settled = true;
       cleanup();
       twitterScriptPromise = null;
@@ -413,7 +417,9 @@ export const TwitterEmbedControl = ({ className }: { className?: string }) => {
           value={url}
           onChange={(e) => {
             setUrl(e.target.value);
-            if (touched) {setTouched(false);}
+            if (touched) {
+              setTouched(false);
+            }
           }}
           onBlur={() => setTouched(true)}
           placeholder="https://x.com/user/status/..."
